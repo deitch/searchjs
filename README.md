@@ -16,6 +16,7 @@ the query.
 Examples
 --------
 Some examples:
+
 1. {name: "John", age: 30} - all records that have name === "John" (ignore-case) && age === 30
 2. {_join: "AND", name: "John", age: 30} - all records that have name === "John" (ignore-case) && age === 30 (same as above)
 3. {_join: "OR", name: "John", age: 30} - all records that have name === "John" (ignore-case) || age === 30
@@ -29,6 +30,7 @@ Syntax Definition
 jsql syntax is defined as follows.
 
 There are two kinds of queries:
+
 * Primitives: Primitives match one or more fields on AND or OR, with or without a negation. 
 * Composites: Composites join multiple primitives. The primitives are in an array in the field "terms". See examle 7.
 
