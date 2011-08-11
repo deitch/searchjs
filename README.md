@@ -49,8 +49,10 @@ searchjs is the reference implementation of jsql. It uses jsql to check if an ob
 list of objects and return those that match. For now, it uses objects in memory only; in the future, it could be extended
 to other data stores.
 
-Installation
-------------
+Installation & Usage
+--------------------
+
+## Node
 In node, install using:
 
 > npm install searchjs
@@ -60,8 +62,6 @@ Browser-version is being worked on. There is nothing node-specific about search 
 Next, require it using:
 > var s = require('searchjs');
 
-Usage
------
 Make a query. There are two types of searches: matchObject and matchArray.
 
 * matchObject (object,jsqlObject): matchObject returns boolean true or false, depending on whether or not the given object matches the given search. 
@@ -73,3 +73,15 @@ file included with searchjs.
 > matches = s.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
 
 > matches = s.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
+
+## Browser
+In the browser, you simply need to include the file lib/search.js. Download it from github (where you are probably reading this)
+and include it in your path. Lots of libraries do require() and inclusion, but the raw, basic way to do it is:
+
+> <script src="lib/searchjs.js"></script>
+
+This will make a global variable SEARCHJS in your window. You can then use it as above:
+
+> matches = SEARCHJS.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
+
+> matches = SEARCHJS.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]

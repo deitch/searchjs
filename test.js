@@ -45,7 +45,7 @@ runTest = function() {
 		m = search.matchArray(data,searches[i].search);
 		// check the results - we need to find a way to match the entries of two arrays of objects
 		//  easiest is probably to just json-ify them and compare the strings
-		assert.equal(JSON.stringify(arrayResults)+" ",JSON.stringify(m),"Should match arrays for search "+i);
+		assert.equal(JSON.stringify(arrayResults),JSON.stringify(m),"Should match arrays for search "+i);
 	}
 };
 
