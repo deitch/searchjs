@@ -78,7 +78,7 @@ file included with searchjs.
 In the browser, you simply need to include the file lib/search.js. Download it from github (where you are probably reading this)
 and include it in your path. Lots of libraries do require() and inclusion, but the raw, basic way to do it is:
 
-> <script src="lib/searchjs.js"></script>
+	<script src="lib/searchjs.js"></script>`
 
 This will make a global variable SEARCHJS in your window. You can then use it as above:
 
