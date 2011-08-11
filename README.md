@@ -39,3 +39,36 @@ If it does not exist or has any other value, it is ignored. See examples 4,5,6.
 
 Join: Join among multiple fields in a primitive, or multiple terms in a composite. By default, the join is AND. If you want to
 use join of OR, add the field _join with the value "OR". See examples 3,6,7.
+
+searchjs
+========
+
+Overview
+--------
+searchjs is the reference implementation of jsql. It uses jsql to check if an object matches a query, or to go through a 
+list of objects and return those that match. For now, it uses objects in memory only; in the future, it could be extended
+to other data stores.
+
+Installation
+------------
+In node, install using:
+
+> npm install searchjs
+
+Browser-version is being worked on. There is nothing node-specific about search js.
+
+Next, require it using:
+> var s = require('searchjs');
+
+Usage
+-----
+Make a query. There are two types of searches: matchObject and matchArray.
+
+* matchObject (object,jsqlObject): matchObject returns boolean true or false, depending on whether or not the given object matches the given search. 
+* matchArray (array,jsqlObject): matchArray returns an array of items, subset of the passed array, that match match the given search.
+
+All objects are stateless. The following examples show how to use matchObject and matchArray. For more details, look at the test.js
+file included with searchjs.
+
+> matches = s.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
+> matches = s.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
