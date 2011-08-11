@@ -55,12 +55,12 @@ Installation & Usage
 ## Node
 In node, install using:
 
-> npm install searchjs
+	npm install searchjs
 
 Browser-version is being worked on. There is nothing node-specific about search js.
 
 Next, require it using:
-> var s = require('searchjs');
+	var s = require('searchjs');
 
 Make a query. There are two types of searches: matchObject and matchArray.
 
@@ -70,18 +70,16 @@ Make a query. There are two types of searches: matchObject and matchArray.
 All objects are stateless. The following examples show how to use matchObject and matchArray. For more details, look at the test.js
 file included with searchjs.
 
-> matches = s.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
-
-> matches = s.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
+	matches = s.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
+	matches = s.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
 
 ## Browser
 In the browser, you simply need to include the file lib/search.js. Download it from github (where you are probably reading this)
 and include it in your path. Lots of libraries do require() and inclusion, but the raw, basic way to do it is:
 
-	<script src="lib/searchjs.js"></script>`
+	<script src="lib/searchjs.js"></script>
 
 This will make a global variable SEARCHJS in your window. You can then use it as above:
 
-> matches = SEARCHJS.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
-
-> matches = SEARCHJS.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
+	matches = SEARCHJS.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
+	matches = SEARCHJS.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
