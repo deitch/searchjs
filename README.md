@@ -71,4 +71,5 @@ All objects are stateless. The following examples show how to use matchObject an
 file included with searchjs.
 
 > matches = s.matchObject({name:"John",age:25},{name:"Johnny"}); // returns false
+
 > matches = s.matchArray([{name:"John",age:25},{name:"Jill",age:30}],{name:"John"}); // returns [{name:"John",age:25}]
