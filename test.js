@@ -3,11 +3,11 @@ var assert = require('assert'), search = require("./lib/searchjs");
 var runTest, data, searches;
 
 data = [
-	{name:"Alice",age:25},
-	{name:"Brian",age:30},
-	{name:"Carrie",age:30},
-	{name:"David",age:35},
-	{name:"Alice",age:30}
+	{name:"Alice",age:25, email: "alice@searchjs.com"},
+	{name:"Brian",age:30, email: "brian@searchjs.com"},
+	{name:"Carrie",age:30, email: "carrie@searchjs.com"},
+	{name:"David",age:35, email: "david@searchjs.com"},
+	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"]}
 ];
 searches = [
 	{search: {name:"alice"}, results:[0,4]},
@@ -17,7 +17,12 @@ searches = [
 	{search: {age:30}, results:[1,2,4]},
 	{search: {age:35, name: "Alice", _join: "OR"},results: [0,3,4]},
 	{search: {age:35, name: "Alice", _not: true},results: [1,2]},
-	{search: {terms: [{age:30,name:"Brian",_join:"AND"},{age:25}], _join:"OR"}, results:[0,1]}
+	{search: {terms: [{age:30,name:"Brian",_join:"AND"},{age:25}], _join:"OR"}, results:[0,1]},
+	{search: {email: "alice@searchjs.com"},results: [0,4]},
+	{search: {name: ["Brian","Carrie"]},results: [1,2]},
+	{search: {email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [0,2,4]},
+	{search: {_not: true, name: ["Brian","Carrie"]},results: [0,3,4]},
+	{search: {_not:true, email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [1,3]}
 ];
 
 
