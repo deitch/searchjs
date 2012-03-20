@@ -15,6 +15,7 @@ searches = [
 	{search: {name:"alice",_not: true}, results:[1,2,3]},
 	{search: {age:25}, results:[0]},
 	{search: {age:30}, results:[1,2,4]},
+	{search: {age:25, name: "Alice",email2:"foo@foo.com"},results: []},
 	{search: {age:35, name: "Alice", _join: "OR"},results: [0,3,4]},
 	{search: {age:35, name: "Alice", _not: true},results: [1,2]},
 	{search: {terms: [{age:30,name:"Brian",_join:"AND"},{age:25}], _join:"OR"}, results:[0,1]},
