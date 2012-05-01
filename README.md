@@ -20,6 +20,10 @@ As of version 0.1.1, several enhancements have been added:
 3. Combine Record Array with Matcher Array: If both the record field value is an array and the matcher value is an array, then it will return true if any one value in the record array matches any one value in the matcher field. See example 10.
 4. Negater: The "_not" negater can be used with Record Array and Matcher Array. See example 11.
 
+As of version 0.1.3, several additional enhancements:
+
+5. Record Object Field: If the field in the object is itself an object, then the match is done to each key in the array, and returns true if one or more matches. See example 8.
+
 Examples
 --------
 Some examples:
@@ -31,7 +35,7 @@ Some examples:
 5. {_not: true, name: "John", age: 30} - all records that have name !== "John" (ignore-case) AND age !== 30
 6. {_not: true, _join: "OR", name: "John", age: 30} - all records that have name !== "John" (ignore-case) OR age !== 30
 7. {_join: "OR", terms: [{name:"John", age:30},{age:35}]} - all records that have (name === "John" && age === 30) || (age === 35)
-8. {email: "john@foo.com"} - all records that have the email === "john@foo.com", if the record has email as a string, or if email is an array, then each element is checked. Both of the following will match: {email:"john@foo.com"} and {email:["john@foo.com","js@gmail.com"]}
+8. {email: "john@foo.com"} - all records that have the email === "john@foo.com", if the record has email as a string; or if email is an array, then each element is checked; or if email is an object, then the keys are checked. All of the following will match: {email:"john@foo.com"} and {email:["john@foo.com","js@gmail.com"]} and {email:{"john@foo.com":true}}
 9. {name:["John","Jill"]} - all records that have name === "John" || name === "Jill"
 10. {email:["john@foo.com","jf@gmail.com"]} - all records that have email === "john@foo.com" || email === "jf@gmail.com" OR email in the record is an array, and at least one value in that array is "john@foo.com" or "jf@gmail.com"
 11. {_not: true, name:["John","Jill"]} - all records that have name !== "John" && name !== "Jill"

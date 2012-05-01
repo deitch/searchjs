@@ -3,9 +3,9 @@ var assert = require('assert'), search = require("./lib/searchjs");
 var runTest, data, searches;
 
 data = [
-	{name:"Alice",age:25, email: "alice@searchjs.com"},
+	{name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}},
 	{name:"Brian",age:30, email: "brian@searchjs.com"},
-	{name:"Carrie",age:30, email: "carrie@searchjs.com"},
+	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
 	{name:"David",age:35, email: "david@searchjs.com"},
 	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"]}
 ];
@@ -23,7 +23,9 @@ searches = [
 	{search: {name: ["Brian","Carrie"]},results: [1,2]},
 	{search: {email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [0,2,4]},
 	{search: {_not: true, name: ["Brian","Carrie"]},results: [0,3,4]},
-	{search: {_not:true, email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [1,3]}
+	{search: {_not:true, email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [1,3]},
+	{search: {city:"Montreal"},results:[0,2]},
+	{search: {_not:true,city:"Montreal"},results:[1,3,4]}
 ];
 
 
