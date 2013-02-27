@@ -1,4 +1,4 @@
-/*jslint node:true, nomen:false */
+/*jslint node:true, nomen:true */
 var assert = require('assert'), search = require("./lib/searchjs");
 var runTest, data, searches;
 
@@ -11,6 +11,10 @@ data = [
 ];
 searches = [
 	{search: {name:"alice"}, results:[0,4]},
+	{search: {name:"alic"}, results:[]},
+	{search: {name:"alic",_text:true}, results:[0,4]},
+	{search: {name:"alic",_word:true}, results:[]},
+	{search: {name:"alice",_word:true}, results:[0,4]},
 	{search: {name:"brian"}, results:[1]},
 	{search: {name:"alice",_not: true}, results:[1,2,3]},
 	{search: {age:25}, results:[0]},
