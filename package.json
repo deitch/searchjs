@@ -6,7 +6,7 @@
   "author": "Avi Deitcher <avi@deitcher.net>",
   "contributors": [
     "Ed Hotchkiss (https://github.com/edwardhotchkiss)"
-  ]
+  ],
   "engines": ["node >= 0.3"],
   "main": "./lib/searchjs.js",
   "test": "./test.js",
