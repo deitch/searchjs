@@ -5,9 +5,9 @@ var runTest, data, searches;
 
 data = [
 	{name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}},
-	{name:"Brian",age:30, email: "brian@searchjs.com"},
+	{name:"Brian",age:30, email: "brian@searchjs.com",male:true},
 	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
-	{name:"David",age:35, email: "david@searchjs.com"},
+	{name:"David",age:35, email: "david@searchjs.com",male:true},
 	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"]}
 ];
 searches = [
@@ -18,6 +18,8 @@ searches = [
 	{search: {name:"alice",_word:true}, results:[0,4]},
 	{search: {name:"brian"}, results:[1]},
 	{search: {name:"alice",_not: true}, results:[1,2,3]},
+	{search: {male:true}, results:[1,3]},
+	{search: {male:true,_not:true}, results:[0,2,4]},
 	{search: {age:25}, results:[0]},
 	{search: {age:30}, results:[1,2,4]},
 	{search: {age:25, name: "Alice",email2:"foo@foo.com"},results: []},
