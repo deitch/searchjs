@@ -34,9 +34,13 @@ searches = [
 	{search: {city:"Montreal"},results:[0,2]},
 	{search: {_not:true,city:"Montreal"},results:[1,3,4]},
 	{search: {age:{from:30}},results:[1,2,3,4]},
+	{search: {age:{gt:30}},results:[1,2,3,4]},
 	{search: {age:{from:30,to:34}},results:[1,2,4]},
+	{search: {age:{gt:30,lt:34}},results:[1,2,4]},
 	{search: {age:{from:25,to:30}},results:[0,1,2,4]},
+	{search: {age:{gt:25,lt:30}},results:[0,1,2,4]},
 	{search: {age:{to:29}},results:[0]},
+	{search: {age:{lt:29}},results:[0]},
 	{search: {_not:true,age:{to:29}},results:[1,2,3,4]},
 	{search: {_not:true,age:{from:30,to:34}},results:[0,3]}
 ];
