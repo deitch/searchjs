@@ -60,17 +60,21 @@ will match any of these:
 ````
 
 #### Range
-If the value of a field in a primitive is an object with either "from" or "to" fields, then it will treat it as a range.
+If the value of a field in a primitive is an object with "from" or "to" or "gt" or "lt" fields, then it will treat it as a range.
 
 ````JavaScript
 {age:{from:30}}  // accepts any age >=30
+{age:{gt:30}}  // accepts any age >=30
 {age:{to:80}}    // accepts any age <=80
+{age:{lt:80}}    // accepts any age <=80
 {age:{from:30,to:80}}  // accepts any age from 30 to 80 (inclusive)
 {_not:true,age:{from:30}} // accepts any age <30
 {age:{nothing:"foo"}}  // ignored
 ````
 
 Accept values in `to` and `from` fields in a range are numbers and strings. The type of the target record's data **must** match the type of the value of `from` and `to`. If not, it is treated as unmatched. You **cannot** match `{age:{from:30}}` to a record `{age:"veryold"}`!
+
+Note that "gt" and "from", and "lt" and "to", are interchangeable. Yes, it should be that "gte" is equivalent to "from" (>=) while "gt" is equivalent to ">", but we aren't there yet.
 
 
 ### Modifiers
@@ -142,6 +146,7 @@ Composities can be layered inside composites, since each term in `terms` can its
 13. `{age: 30}` - all records that have age === 30
 14. `{age: 30, _not: true}` - all records that have age !== 30
 14. `{age: {from:30, to:35}}` - all records that have age >= 30 && age <=35
+14. `{age: {gt:30, lt:35}}` - all records that have age >= 30 && age <=35
 14. `{_not: true, age: {from:30, to:35}}` - all records that have age !(>= 30 && age <=35) i.e. age < 30 || age > 35
 15. `{name: "John", age: {from:30, to:35}}` - all records that have name === "John" && age >= 30 && age <=35
 15. `{_not: true, name: "John", age: {from:30, to:35}}` - all records that have name !== "John" && age !(>= 30 && age <=35)
