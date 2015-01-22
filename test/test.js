@@ -19,6 +19,7 @@ searches = [
 	{search: {name:"brian"}, results:[1]},
 	{search: {name:"alice",_not: true}, results:[1,2,3]},
 	{search: {male:true}, results:[1,3]},
+	{search: {age:30,male:true}, results:[1]},
 	{search: {male:true,_not:true}, results:[0,2,4]},
 	{search: {age:25}, results:[0]},
 	{search: {age:30}, results:[1,2,4]},
