@@ -5,13 +5,15 @@ var runTest, data, searches;
 
 data = [
 	{name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}},
-	{name:"Brian",age:30, email: "brian@searchjs.com",male:true},
+	{name:"Brian",age:30, email: "brian@searchjs.com",male:true,empty:"hello"},
 	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
 	{name:"David",age:35, email: "david@searchjs.com",male:true},
 	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"]}
 ];
 searches = [
 	{search: {name:"alice"}, results:[0,4]},
+	{search: {name:undefined}, results:[]},
+	{search: {empty:undefined}, results:[0,2,3,4]} ,
 	{search: {name:"alic"}, results:[]},
 	{search: {name:"alic",_text:true}, results:[0,4]},
 	{search: {name:"alic",_word:true}, results:[]},
