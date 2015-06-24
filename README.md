@@ -37,6 +37,12 @@ The name of a field in a primitive is *always* the name of the field to match in
 * Array: will match against any one of the values in the array. See below.
 * Object: will look for a range. See below.
 
+Additionally, you can do deep searching on an object of an object using dot-notation. So if you want to match on the object `{city: {Montreal: true}}` then you can search:
+
+* `{"city.Montreal": true}` - primitive that checks that the field "city" has an object as its value, which in turn has a key "Montreal" with a value of `true`
+
+Any modifiers that apply to simple primitives apply to deep fields as well.
+
 #### Array Primitive
 If the value of a field in a primitive is an array, then it will accept a match of any one of the array values. 
 
@@ -118,6 +124,20 @@ Here are some examples of text searching:
 * `{name:"davi"}` matches all of `{name:"davi"}, {name:"DAvi"}` but none of `{name:"david"}, {name:"abc davi def"}`
 * `{name:"davi",_word:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"abc davi def"}` but none of `{name:"david"}`
 * `{name:"davi",_text:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"abc davi def"}, {name:"abdavideq"}`
+
+#### Deep Search Separator
+
+As described above, you can search deep objects using dot notation. `{"city.Montreal": true}` will match an object `{city: {Montreal: true}}`.
+
+However, what if you do *not* want the '.' character to be your separator? For example, what if your object key itself has a dot?
+
+`{"city.Montreal": "bagels"}`
+
+If you try to match it with a search `{"city.Montreal": "bagels"}`, it will look for `{city: {Montreal: "bagels"}}`, which is not what you have?
+
+You can change the separator from '.' to any other character that makes you happy. Enter the search term as follows:
+
+`{"city:Montreal": "bagels", _separator: ':'}` will match {city: {Montreal: "bagels"}}
 
 
 ### Composites
