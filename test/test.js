@@ -4,11 +4,11 @@ var assert = require('assert'), search = require("../lib/searchjs");
 var runTest, data, searches;
 
 data = [
-  {name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}},
+  {name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" } } },
   {name:"Brian",age:30, email: "brian@searchjs.com",male:true,empty:"hello"},
   {name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
   {name:"David",age:35, email: "david@searchjs.com",male:true},
-  {name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"]}
+  {name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"], cars: [{brand: 'BMW', cds: [{title:'Best Of 2015'}]}, {brand: 'Porsche'}]}
 ];
 searches = [
   {search: {name:"alice"}, results:[0,4]},
@@ -53,7 +53,13 @@ searches = [
   {search: {"city.Montreal":true},results:[2]},
   {search: {"city.Montreal":"abc"},results:[]},
   {search: {"city.Montreal":["abc"]},results:[]},
-  {search: {"city.foo":"abc"},results:[]}
+  {search: {"city.foo":"abc"},results:[]},
+  {search: {"other.personal.birthPlace":"vancouver"},results:[0]},
+  {search: {"other:personal:birthPlace":"vancouver",_separator: ':'},results:[0]},
+  {search: {"cars.brand":"bmw"},results:[4]},
+  {search: {"cars.cds.title":"Best Of 2014"},results:[]},
+  {search: {"cars.cds.title":"Best Of 2015"},results:[4]},
+  {search: {"cars:cds:title":"Best Of 2015",_separator: ':'},results:[4]}
 ];
 
 
