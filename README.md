@@ -129,6 +129,37 @@ Here are some examples of text searching:
 
 As described above, you can search deep objects using dot notation. `{"city.Montreal": true}` will match an object `{city: {Montreal: true}}`.
 
+But what happens if your object is more complex and it contains an array of objects and you want to look for values within it? Also that is no problem. As soon as searchjs encounters an array it simply checks all the objects in it for a match. That makes it possible to even search complex the most complex objects.
+
+So this search:
+```
+{ "name.cars.hp": {from: 200} }
+```
+
+would work with and would find both of the following entries even though in one "cars" is an object and in the other it is an array of objects:
+```
+{
+	name: "John",
+	cars: {
+		brand: "porsche"
+		hp: 450
+	}
+}
+{
+	name: "Tim",
+	cars: [
+		{
+			brand: "bmw",
+			hp: 250
+		},{
+			brand: "vw",
+			hp: 75
+		}
+	]
+}
+```
+
+
 However, what if you do *not* want the '.' character to be your separator? For example, what if your object key itself has a dot?
 
 `{"city.Montreal": "bagels"}`
