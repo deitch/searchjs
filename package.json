@@ -1,22 +1,32 @@
 {
   "name": "searchjs",
   "description": "A library for filtering JavaScript objects based on a json SQL-like language, jsql",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "url": "http://github.com/deitch/searchjs",
   "author": "Avi Deitcher (https://github.com/deitch)",
   "contributors": [
-		"Avi Deitcher (https://github.com/deitch)",
-    "Ed Hotchkiss (https://github.com/edwardhotchkiss)",
-    "Jan (https://github.com/janober)"
+    {
+      "name": "Avi Deitcher",
+      "url": "http://github.com/deitcher"
+    },
+		{
+			"name":"Ed Hotchkiss",
+			"url":"https://github.com/edwardhotchkiss"
+		},
+		{
+			"name":"Jan",
+			"url":"https://github.com/janober"
+		}
   ],
-  "engines": [
-    "node >= 0.3"
-  ],
+  "engines": {
+    "node": ">=0.8"
+  },
   "main": "./lib/searchjs.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/deitch/searchjs.git"
   },
+  "bugs": "https://github.com/deitch/searchjs/issues"	
   "devDependencies": {
     "mocha": "~1.13.0",
     "should": "~1.3.0"
