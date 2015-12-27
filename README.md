@@ -1,7 +1,7 @@
 # jsql
 
 ## Overview
-jsql is a JavaScript query language, along with a simple JavaScript objects (POJSO) reference implementation. 
+jsql is a JavaScript query language, along with a simple JavaScript objects (POJSO) reference implementation.
 
 This is not intended to search the dom, or jQuery, or some specific database, nor is it intended to enable using SQL in a browser.
 jsql is intended to provide a native JSON query format for querying anything, although initially limited to JavaScript objects.
@@ -18,12 +18,12 @@ jsql *always* is a single JavaScript object: `{}` with properties that determine
 
 There are three kinds of properties for a query:
 
-* Primitives: Primitives match one or more fields on AND or OR, with or without a negation. 
+* Primitives: Primitives match one or more fields on AND or OR, with or without a negation.
 * Modifiers: Modifiers determine how the other properties are treated: negation, field join type, ranges and text searches.
 * Composites: Composites join multiple primitives. The primitives are in an array in the field "terms". See example 7.
 
 ### Primitives
-A primitive is an object with properties that are matched. 
+A primitive is an object with properties that are matched.
 
 * `{name:"John"}` - primitive that checks that the name field is equal to "John"
 
@@ -70,7 +70,7 @@ Thus, the search primitive `{"name.cars.hp":{from:200}}` will match any of the f
 
 
 #### Array Primitive
-If the value of a field in a primitive is an array, then it will accept a match of any one of the array values. 
+If the value of a field in a primitive is an array, then it will accept a match of any one of the array values.
 
 ````JavaScript
 {name:["John","Jack"]} // accepts any record where the name field matches 'John' or 'Jack'
@@ -155,37 +155,6 @@ Here are some examples of text searching:
 
 As described above, you can search deep objects using dot notation. `{"city.Montreal": true}` will match an object `{city: {Montreal: true}}`.
 
-But what happens if your object is more complex and it contains an array of objects and you want to look for values within it? Also that is no problem. As soon as searchjs encounters an array it simply checks all the objects in it for a match. That makes it possible to even search complex the most complex objects.
-
-So this search:
-```
-{ "name.cars.hp": {from: 200} }
-```
-
-would work with and would find both of the following entries even though in one "cars" is an object and in the other it is an array of objects:
-```
-{
-	name: "John",
-	cars: {
-		brand: "porsche"
-		hp: 450
-	}
-}
-{
-	name: "Tim",
-	cars: [
-		{
-			brand: "bmw",
-			hp: 250
-		},{
-			brand: "vw",
-			hp: 75
-		}
-	]
-}
-```
-
-
 However, what if you do *not* want the '.' character to be your separator? For example, what if your object key itself has a dot?
 
 `{"city.Montreal": "bagels"}`
@@ -233,7 +202,7 @@ Composities can be layered inside composites, since each term in `terms` can its
 # searchjs
 
 ## Overview
-searchjs is the reference implementation of jsql. It uses jsql to check if an object matches a query, or to go through a 
+searchjs is the reference implementation of jsql. It uses jsql to check if an object matches a query, or to go through a
 list of objects and return those that match. For now, it uses objects in memory only; in the future, it could be extended
 to other data stores.
 
@@ -251,7 +220,7 @@ Next, require it using:
 
 Make a query. There are two types of searches: matchObject and matchArray.
 
-* `matchObject(object,jsqlObject)`: matchObject returns boolean true or false, depending on whether or not the given object matches the given search. 
+* `matchObject(object,jsqlObject)`: matchObject returns boolean true or false, depending on whether or not the given object matches the given search.
 * `matchArray(array,jsqlObject)`: matchArray returns an array of items, subset of the passed array, that match match the given search.
 
 All objects are stateless. The following examples show how to use matchObject and matchArray. For more details, look at the test.js
@@ -291,4 +260,3 @@ As of version 0.1.1, several enhancements have been added:
 As of version 0.1.3, several additional enhancements:
 
 5. Record Object Field: If the field in the object is itself an object, then the match is done to each key in the array, and returns true if one or more matches. See example 8.
-
