@@ -8,7 +8,7 @@ data = [
 	{name:"Brian",age:30, email: "brian@searchjs.com",male:true,empty:"hello"},
 	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
 	{name:"David",age:35, email: "david@searchjs.com",male:true},
-	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"], cars: [{brand: 'BMW', cds: [{title:'Best Of 2015'}]}, {brand: 'Porsche'}]}
+	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"], cars: [{brand: 'BMW', cds: [{title:'Best Of 2015'}, {title:'Best Of 2016'}]}, {brand: 'Porsche'}]}
 ];
 searches = [
 	{search: {name:"alice"}, results:[0,4]},
@@ -59,7 +59,8 @@ searches = [
 	{search: {"cars.brand":"bmw"},results:[4]},
 	{search: {"cars.cds.title":"Best Of 2014"},results:[]},
 	{search: {"cars.cds.title":"Best Of 2015"},results:[4]},
-	{search: {"cars:cds:title":"Best Of 2015",_separator: ':'},results:[4]}
+	{search: {"cars:cds:title":"Best Of 2015",_separator: ':'},results:[4]},
+	{search: {"cars.cds.title":"Best Of 2016"},results:[4]}
 ];
 
 
