@@ -218,10 +218,11 @@ Browser-version is being worked on. There is nothing node-specific about search 
 Next, require it using:
 	var s = require('searchjs');
 
-Make a query. There are two types of searches: matchObject and matchArray.
+Make a query. There are three types of searches: object, array of objects, and single value.
 
 * `matchObject(object,jsqlObject)`: matchObject returns boolean true or false, depending on whether or not the given object matches the given search. 
 * `matchArray(array,jsqlObject)`: matchArray returns an array of items, subset of the passed array, that match match the given search.
+* `matchField(value,comparator,text,word)`: check if a single `value` matches a given comparator. 
 
 All objects are stateless. The following examples show how to use matchObject and matchArray. For more details, look at the test.js
 file included with searchjs.
@@ -230,7 +231,58 @@ file included with searchjs.
 var list = [{name:"John",age:25},{name:"Jill",age:30}];
 matches = s.matchObject(list[0],{name:"Johnny"}); // returns false
 matches = s.matchArray(list,{name:"John"}); // returns [{name:"John",age:25}]
+matches = s.matchField(list[0].name,"John"); // returns true
 ````
+
+#### matchField
+`matchField(value,comparator,text,word)` is the underlying matcher for matching an individual object. It always returns `true` or `false`, depending on whether the item matched. It infers the type of `value`, and then tests it against the comparator.
+
+The argument structure is as follows:
+
+* `value`: a single value that is to be matched. It can be any item type, including string, number, boolean, array, object, null, undefined.
+* `comparator`: the rule for comparison. See below.
+* `text`: boolean. For strings only, determine whether to allow for `comparator` to exist anywhere in `value`, or if it must be an exact match. See below.
+* `word`: boolean. For strings only, determine whether `comparator` should exist as a single word in `value`, or if it must be an exact match. 
+
+##### String matching
+If `value` is a string, then `comparator`, which also should be a string, can be matched in one of 3 ways:
+
+1. Exact match: Do not set `text` or `word`. This is the default.
+2. Anywhere: `comparator` can exist anywhere in `value`. Set `text = true`.
+3. Exact word: `comparator` must be a word somewhere in `value`. Set `word = true`.
+
+Note that `text` overrides `word` if both are set to `true`.
+
+Examples:
+
+````javascript
+matchFiled("This is a cool program","progr"); // false
+matchFiled("This is a cool program","progr",false,false); // false
+matchFiled("This is a cool program","progr",false); // false
+matchFiled("This is a cool program","progr"); // false
+matchFiled("This is a cool program","progr", true); // true
+matchFiled("This is a cool program","program",false,true); // true
+matchFiled("This is a cool program","This is a cool program"); // true
+````
+
+##### Comparator
+The comparator can be one of the following, and match based on the following comparator rules
+
+* `null`: match if `value === null`
+* `undefined`: match if `value === undefined`
+* `true`: match if `value === true` (no casting is done, precise match)
+* `false`: match if `value === false` (no casting is done, precise match)
+* `number`: match if `value === comparator` (no casting is done, precise match)
+* `object` with range for numeric `value`: `{from: 12, to: 25}` or `{gt: 11, lt: 26}`. Match if `typeof(value) === "number"` and `value` is in the given range.
+* `string`: match if one of the following conditions is true:
+    * (`typeof(value) === "string"`) and (`value === comparator`)
+    * (`typeof(value) === "string"`) and (`value` contains `comparator`) and (`text === true`)
+    * (`typeof(value) === "string"`) and (`value` contains a word equal to `comparator`) and (`word === true`)
+    * (`typeof(value) === "object"`) and (`value[comparator] !=== undefined`)
+* Array: match each item in the array. Return `true` if a single item matches.
+
+
+
 
 
 ### Browser
@@ -246,18 +298,4 @@ var list = [{name:"John",age:25},{name:"Jill",age:30}];
 matches = SEARCHJS.matchObject(list[0],{name:"Johnny"}); // returns false
 matches = SEARCHJS.matchArray(list,{name:"John"}); // returns [{name:"John",age:25}]
 ````
-
-## Changelist
-Version 0.3.0 adds support for query ranges. You can query `{age: {from:25,to:30}}`
-
-As of version 0.1.1, several enhancements have been added:
-
-1. Record Array Field: If the field in the object is an array, then the match is done to each item in the array, and returns true if one or more matches. See example 8.
-2. Matcher Array Value: If the primitive value is an array, then the value in the record field is matched to each element in the array. See example 9.
-3. Combine Record Array with Matcher Array: If both the record field value is an array and the matcher value is an array, then it will return true if any one value in the record array matches any one value in the matcher field. See example 10.
-4. Negater: The "_not" negater can be used with Record Array and Matcher Array. See example 11.
-
-As of version 0.1.3, several additional enhancements:
-
-5. Record Object Field: If the field in the object is itself an object, then the match is done to each key in the array, and returns true if one or more matches. See example 8.
 
