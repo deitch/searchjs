@@ -69,6 +69,25 @@ Thus, the search primitive `{"name.cars.hp":{from:200}}` will match any of the f
 * `{cars: [{brand: 'bmw',hp:250},{brand: 'lada',hp:10}]}` matches the 'bmw' but not the 'lada', therefore the whole object matches
 
 
+#### Property Search
+
+If you are not sure in which level a specific property can be found you can
+use the propertySearch modifier. It checks on each level if a property exists
+and then checks if it matches.
+
+The following search would find the item bellow:
+````JavaScript
+{"name":"tom", _propertySearch:true}
+````
+
+Item:
+````JavaScript
+{"level1":{"level2":{"level3":{name: "tom"}}}}
+````
+
+Caution: `Property Search` does not work together with `Deep Search`.
+
+
 #### Array Primitive
 If the value of a field in a primitive is an array, then it will accept a match of any one of the array values.
 
