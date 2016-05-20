@@ -85,18 +85,29 @@ Item:
 {"level1":{"level2":{"level3":{name: "tom"}}}}
 ````
 
-It is also possible to limit the search depth. The following query would find
+Works also in combination with `Deep Search`.
+It is possible to omit any level inbetween. So all the following queries will
+match the above item.
+````JavaScript
+{"name":"tom", "_propertySearch": true}
+{"level1.name":"tom", "_propertySearch": true}
+{"level1.level2.name":"tom", "_propertySearch": true}
+{"level4.name":"tom", "_propertySearch": true}
+{"level1.level4.name":"tom", "_propertySearch": true},
+{"name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
+{"level1.name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
+````
+
+It is also possible to limit the search depth. The following query would match
 the above item:
 ````JavaScript
-{name:'tom', _propertySearch:true, _propertySearchDepth: 4}
+{"name": "tom", "_propertySearch": true, "_propertySearchDepth": 4}
 ````
 
-However this one would not because it would stop the search in the level before:
+However this one would not because it stops the search one level before:
 ````JavaScript
-{name:'tom', _propertySearch:true, _propertySearchDepth: 3}
+{"name":"tom", "_propertySearch": true, "_propertySearchDepth": 3}
 ````
-
-Caution: `Property Search` does not work together with `Deep Search`.
 
 
 #### Array Primitive
