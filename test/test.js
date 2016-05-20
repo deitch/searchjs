@@ -69,7 +69,10 @@ searches = [
 	{search: {"brand":"bmw", _propertySearch:true}, results:[3,4]},
 	{search: {"title":"Best Of 2015", _propertySearch:true}, results:[4]},
 	{search: {build:{from:2016}},results:[]},
-	{search: {build:{from:2016}, _propertySearch:true},results:[3]}
+	{search: {build:{from:2016}, _propertySearch:true},results:[3]},
+	{search: {"brand":"bmw", _propertySearch:true, _propertySearchDepth: 2}, results:[4]},
+	{search: {"brand":"bmw", _propertySearch:true, _propertySearchDepth: 3}, results:[3,4]},
+	{search: {"brand":"bmw", _propertySearch:true, _propertySearchDepth: -1}, results:[3,4]}
 ];
 
 

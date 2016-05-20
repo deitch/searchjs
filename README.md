@@ -85,6 +85,17 @@ Item:
 {"level1":{"level2":{"level3":{name: "tom"}}}}
 ````
 
+It is also possible to limit the search depth. The following query would find
+the above item:
+````JavaScript
+{name:'tom', _propertySearch:true, _propertySearchDepth: 4}
+````
+
+However this one would not because it would stop the search in the level before:
+````JavaScript
+{name:'tom', _propertySearch:true, _propertySearchDepth: 3}
+````
+
 Caution: `Property Search` does not work together with `Deep Search`.
 
 
