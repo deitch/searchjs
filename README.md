@@ -43,6 +43,19 @@ Primitives will search against individual values and against one or more matches
 * `{name:["John","jim"]}`
 * `{name:["jim","John"]}`
 
+
+#### Overwrite Defaults
+
+All the defaults can be overwritten if needed. So if a different separator should
+be used by default for Deep Search or Property Search should be activated for
+all queries it can be done like this:
+
+````JavaScript
+var s = require('searchjs');
+s.setGlobalDefaults({separator: '|', propertySearch: true});
+````
+
+
 #### Deep Searching
 
 You are not limited to searching only at the top level. You also can do deep searching on an object of an object using dot-notation. So if you want to match on the object `{city: {Montreal: true}}` then you can search:
