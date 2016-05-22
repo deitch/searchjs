@@ -43,6 +43,7 @@ Primitives will search against individual values and against one or more matches
 * `{name:["John","jim"]}`
 * `{name:["jim","John"]}`
 
+
 #### Deep Searching
 
 You are not limited to searching only at the top level. You also can do deep searching on an object of an object using dot-notation. So if you want to match on the object `{city: {Montreal: true}}` then you can search:
@@ -67,6 +68,54 @@ Thus, the search primitive `{"name.cars.hp":{from:200}}` will match any of the f
 
 * `{cars: {brand: 'porsche',hp:450}}`
 * `{cars: [{brand: 'bmw',hp:250},{brand: 'lada',hp:10}]}` matches the 'bmw' but not the 'lada', therefore the whole object matches
+
+
+#### Property Search
+
+
+If you are not sure in which level a specific property can be found you can
+use the `propertySearch` modifier. It checks on each level if a property exists
+and then checks if it matches.
+
+The following search would find the item below:
+````JavaScript
+{"name":"tom", _propertySearch:true}
+````
+
+Item:
+````JavaScript
+{"level1":{"level2":{"level3":{name: "tom"}}}}
+````
+
+This works also in combination with `Deep Search`.
+
+It is possible to omit any level in between. So all the following queries will
+match the above item.
+
+````JavaScript
+{"name":"tom", "_propertySearch": true}
+{"level1.name":"tom", "_propertySearch": true}
+{"level1.level2.name":"tom", "_propertySearch": true}
+{"level4.name":"tom", "_propertySearch": true}
+{"level1.level4.name":"tom", "_propertySearch": true},
+{"name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
+{"level1.name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
+````
+
+It is also possible *and often recommended* to limit the search depth. The following query would match
+the above item:
+
+````JavaScript
+{"name": "tom", "_propertySearch": true, "_propertySearchDepth": 4}
+````
+
+However this one would not because it stops the search one level before:
+
+````JavaScript
+{"name":"tom", "_propertySearch": true, "_propertySearchDepth": 3}
+````
+
+searchjs normally matches exactly the objects and depths you provide. With Property Searching, it is possible, especially on a large data set, to spend a *lot* of time (and CPU and memory) searching. We strongly recommend limiting the `propertySearchDepth` unless you know the data set with which you are working is limited.
 
 
 #### Array Primitive
@@ -174,6 +223,7 @@ If you want to combine multiple composites into a single search term, you put th
 ````
 
 Composities can be layered inside composites, since each term in `terms` can itself be a composite.
+
 
 ## Examples
 
