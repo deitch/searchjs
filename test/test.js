@@ -1,9 +1,10 @@
 /*jslint node:true, nomen:true */
-var assert = require('assert'), search = require("../lib/searchjs");
-var runTest, data, searches;
+/*global it, describe, before, after */
+var search = require("../lib/searchjs"), should = require('should');
+var data, searches;
 
 data = [
-	{name:"Alice",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" }, emptyArray2: [] }, emptyArray1: [] },
+	{name:"Alice",fullname:"I am Alice Shiller",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" }, emptyArray2: [] }, emptyArray1: [] },
 	{name:"Brian",age:30, email: "brian@searchjs.com",male:true,empty:"hello"},
 	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
 	{name:"David",age:35, email: "david@searchjs.com",male:true, personal: {cars: [{brand: 'Porsche', build: 2016}, {brand: 'BMW', build: 2014}]}},
@@ -89,36 +90,172 @@ searches = [
 ];
 
 
-// run each test
-runTest = function() {
-	var i, j, m, hash, arrayResults, entry;
-	// we will go through each search
-	for (i=0;i<searches.length;i++) {
-		// turn the results array into a hash
-		hash = {};
-		arrayResults = [];
-		entry = searches[i];
-		// first indicate that none of the data should be a match unless we say it is
-		for (j=0; j<data.length;j++) {
-			hash[j] = false;
+describe('searchjs', function(){
+	describe('without defaults', function(){
+		var i, j, m, hash, arrayResults, entry;
+		// we will go through each search
+		for (i=0;i<searches.length;i++) {
+			// turn the results array into a hash
+			hash = {};
+			arrayResults = [];
+			entry = searches[i];
+			// first indicate that none of the data should be a match unless we say it is
+			for (j=0; j<data.length;j++) {
+				hash[j] = false;
+			}
+			// identify those that we expect to be a match: mark the hash as true, and save the actual data entry to arrayResults
+			for (j=0; j<entry.results.length; j++) {
+				hash[entry.results[j]] = true;
+				arrayResults.push(data[entry.results[j]]);
+			}
+			// first do the object search matches - search across all the objects, and expect the results to match only the ones we indicated in the hash
+			(function(hash,arrayResults,entry){
+				describe('for entry '+JSON.stringify(entry.search), function(){
+					describe('matchObject', function(){
+						for (j=0; j<data.length;j++) {
+							(function (d,h) {
+								var isNot = (h?"":"NOT ");
+								it('should '+isNot+"match for data "+JSON.stringify(d), function(){
+									m = search.matchObject(d,entry.search);
+									// it should be a match or not
+									m.should.eql(h);
+								});
+							}(data[j],hash[j]));
+						}
+					});
+					describe('matchArray', function(){
+						it('should match only '+JSON.stringify(arrayResults), function(){
+							// next do the array matches - match against the entire data set, and expect the results to match our results
+							m = search.matchArray(data,entry.search);
+							// check the results - we need to find a way to match the entries of two arrays of objects
+							//  easiest is probably to just json-ify them and compare the strings
+							m.should.eql(arrayResults);
+						});
+					});
+				});
+			}(hash,arrayResults,entry));
 		}
-		// identify those that we expect to be a match: mark the hash as true, and save the actual data entry to arrayResults
-		for (j=0; j<entry.results.length; j++) {
-			hash[entry.results[j]] = true;
-			arrayResults.push(data[entry.results[j]]);
-		}
-		// first do the object search matches - search across all the objects, and expect the results to match only the ones we indicated in the hash
-		for (j=0; j<data.length;j++) {
-			m = search.matchObject(data[j],entry.search);
-			// it should be a match or not
-			assert.equal(m,hash[j],JSON.stringify(entry.search)+" should "+(hash[j]?"":"NOT ")+"match for data "+JSON.stringify(data[j]));
-		}
-		// next do the array matches - match against the entire data set, and expect the results to match our results
-		m = search.matchArray(data,searches[i].search);
-		// check the results - we need to find a way to match the entries of two arrays of objects
-		//  easiest is probably to just json-ify them and compare the strings
-		assert.equal(JSON.stringify(arrayResults),JSON.stringify(m),JSON.stringify(entry.search)+" expected results "+JSON.stringify(arrayResults)+" instead of "+JSON.stringify(m));
-	}
-};
+	});
 
-runTest();
+	// defaults has many more permutations, so we are structuring it manually
+	describe('with defaults', function(){
+		describe('negator', function(){
+			var nonot, yesnot;
+			before(function(){
+				yesnot = search.matchArray(data,{name:"alice",_not:true});
+				nonot = search.matchArray(data,{name:"alice",_not:false});
+				search.setDefaults({negator:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match NOT without explicit _not', function(){
+				search.matchArray(data,{name:"alice"}).should.eql(yesnot);
+			});
+			it('should match true with explicit override', function(){
+				search.matchArray(data,{name:"alice",_not:false}).should.eql(nonot);
+			});
+		});
+		describe('join', function(){
+			var joinand, joinor;
+			before(function(){
+				joinand = search.matchArray(data,{age:25, name: "Alice"});
+				joinor = search.matchArray(data,{age:25, name: "Alice",_join:"OR"});
+				search.setDefaults({join:"OR"});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match OR without explicit OR', function(){
+				search.matchArray(data,{name:"alice","age":25}).should.eql(joinor);
+			});
+			it('should match AND with explicit override', function(){
+				search.matchArray(data,{name:"alice","age":25,_join:"AND"}).should.eql(joinand);
+			});
+		});
+		describe('text', function(){
+			var yestext, notext;
+			before(function(){
+				yestext = search.matchArray(data,{name:"alic",_text:true});
+				notext = search.matchArray(data,{name:"alic"});
+				search.setDefaults({text:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match text without explicit _text', function(){
+				search.matchArray(data,{name:"alic"}).should.eql(yestext);
+			});
+			it('should match not text with explicit override', function(){
+				search.matchArray(data,{name:"alic",_text:false}).should.eql(notext);
+			});
+		});
+		describe('word', function(){
+			var yesword, noword;
+			before(function(){
+				yesword = search.matchArray(data,{fullname:"alice",_word:true});
+				noword = search.matchArray(data,{fullname:"alice"});
+				search.setDefaults({word:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match text without explicit _text', function(){
+				search.matchArray(data,{fullname:"alice"}).should.eql(yesword);
+			});
+			it('should match not text with explicit override', function(){
+				search.matchArray(data,{fullname:"alice",_word:false}).should.eql(noword);
+			});
+		});
+		describe('separator', function(){
+			var matches;
+			before(function(){
+				matches = search.matchArray(data,{"city.Montreal":"first"});
+				search.setDefaults({separator:":"});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match field without explicit separator', function(){
+				search.matchArray(data,{"city:Montreal":"first"}).should.eql(matches);
+			});
+			it('should match field with explicit separator override', function(){
+				search.matchArray(data,{"city.Montreal":"first",_separator:"."}).should.eql(matches);
+			});
+		});
+		describe('propertySearch', function(){
+			var yesdeep, nodeep;
+			before(function(){
+				yesdeep = search.matchArray(data,{"Montreal":"first",_propertySearch:true});
+				nodeep = search.matchArray(data,{"Montreal":"first"});
+				search.setDefaults({propertySearch:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match field without explicit _propertySearch', function(){
+				search.matchArray(data,{"Montreal":"first"}).should.eql(yesdeep);
+			});
+			it('should not match field with explicit _propertySearch override', function(){
+				search.matchArray(data,{"Montreal":"first",_propertySearch:false}).should.eql(nodeep);
+			});
+		});
+		describe('propertySearchDepth', function(){
+			var yesdepth, nodepth;
+			before(function(){
+				yesdepth = search.matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth: 2});
+				nodepth = search.matchArray(data,{"brand":"bmw",_propertySearch:true});
+				search.setDefaults({propertySearchDepth:2});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match correct fields without explicit _propertySearchDepth', function(){
+				search.matchArray(data,{"brand":"bmw",_propertySearch:true}).should.eql(yesdepth);
+			});
+			it('should not match field with explicit _propertySearch override', function(){
+				search.matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth:-1}).should.eql(nodepth);
+			});
+		});
+	});
+});

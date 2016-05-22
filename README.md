@@ -225,6 +225,7 @@ If you want to combine multiple composites into a single search term, you put th
 Composities can be layered inside composites, since each term in `terms` can itself be a composite.
 
 
+
 ## Examples
 
 1. `{name: "John", age: 30}` - all records that have name === "John" (ignore-case) && age === 30
@@ -333,6 +334,33 @@ The comparator can be one of the following, and match based on the following com
 
 
 
+### Override Defaults
+ 
+Most of the functionality in searchjs has a given set of defaults. If you wish to override those defaults globally, you can do so as follows:
+
+````JavaScript
+var s = require('searchjs');
+s.setDefaults(defaults);
+````
+
+where `defaults` is an object with the property name and its new default. This can be convenient, for example, if you wish to set the same separator for all searches, and not set them independently for each one.
+
+As of this writing, the following defaults can be overridden:
+
+* `negator`: boolean. Whether or not a search term should match on `true` or `false`. Defaults to `false`. If set to `true`, then searching `{name: "Jill"}` will match all those whose names are *not* `"Jill"`, the equivalent of setting `{name: "Jill", _not: true}`.
+* `join`: String, whether to join search terms by default with a logical AND or logical OR. Defaults to `"AND"`. If set to `"OR"`, then searching `{name: "Jill", age: 30}` will match those whose name is `"Jill"` *OR* who have the age of `30`, the equivalent of setting `{name: "Jill", age: 30, _join: "OR"}`.
+* text: boolean. Whether string values in searches should match text, i.e. as part of the field. Defaults to `false`. If set to `true`, then searching `{name: "Jill"}` will match those whose names are `"Jill"`, `"Jillian"`, "EJilli", the equivalent of searching for `{name: "Jill", _text:true}`.
+* word: boolean. Whether string values in searches should match word, i.e. as a complete word as part of the field. Defaults to `false`. If set to `true`, then searching `{name: "Jill"}` will match those whose names are `"Jill"`, `"Hi Jill Smith"`, the equivalent of searching for `{name: "Jill", _word:true}`.
+* separator: The character to use as the separator for deep searching. Defaults to `'.'`. Changing it, for example, to `':'` and then searching for `{"city:Montreal": "Bagels"}` is the equivalent of `{"city:Montreal": "Bagels", _separator: ":"}`.
+* propertySearch: Whether to use deep property matching by default. Defaults to `false`. If set to `true`, then will always do deep property searching. Searching for `{name: "Jill"}` will be the equivalent of `{name: "Jill", _propertySearch: true}`.
+* propertySearchDepth: How deep to do deep property searches by default. Defaults to `-1`, i.e. infinite depth. 
+  
+
+At any point, you can reset defaults by doing:
+
+````JavaScript
+s.resetDefaults();
+````
 
 
 ### Browser
