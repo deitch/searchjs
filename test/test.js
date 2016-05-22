@@ -86,6 +86,12 @@ searches = [
 	{search: {"level3.level4.level6":200, _propertySearch:true, _propertySearchDepth: 6}, results:[6]},
 	{search: {"level6":{gt:100,lt:300}, _propertySearch:true},results:[6]},
 	{search: {"terms":[{"level6":{gt:100}, _propertySearch:true}, {"level1.level6":{lt:300}, _propertySearch:true}]},results:[6]},
+
+	// setGlobalDefaults tests, keep them at the end because they do not get reset afterwards
+	{search: {"terms":[{"level6":{gt:100}, _propertySearch:true}, {"level1.level6":{lt:300}}]}, defaults:{propertySearch: true},results:[6]},
+	{search: {"brand":"bmw"}, defaults:{propertySearch: true, propertySearchDepth:2}, results:[4]},
+	{search: {"brand":"bmw"}, defaults:{propertySearch: true, propertySearchDepth:3}, results:[3,4]},
+	{search: {"city:Montreal":"first"}, defaults: {separator: ':'},results:[0]}
 ];
 
 
@@ -98,6 +104,13 @@ runTest = function() {
 		hash = {};
 		arrayResults = [];
 		entry = searches[i];
+
+		// If there are any defaults defined we set them
+		if (entry.hasOwnProperty('defaults')) {
+			//search.setGlobalDefaults({separator: '|', propertySearch: true});
+			search.setGlobalDefaults(entry.defaults);
+		}
+
 		// first indicate that none of the data should be a match unless we say it is
 		for (j=0; j<data.length;j++) {
 			hash[j] = false;
