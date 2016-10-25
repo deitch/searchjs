@@ -1,7 +1,7 @@
 # jsql
 
 ## Overview
-jsql is a JavaScript query language, along with a simple JavaScript objects (POJSO) reference implementation. 
+jsql is a JavaScript query language, along with a simple JavaScript objects (POJSO) reference implementation.
 
 This is not intended to search the dom, or jQuery, or some specific database, nor is it intended to enable using SQL in a browser.
 jsql is intended to provide a native JSON query format for querying anything, although initially limited to JavaScript objects.
@@ -18,12 +18,12 @@ jsql *always* is a single JavaScript object: `{}` with properties that determine
 
 There are three kinds of properties for a query:
 
-* Primitives: Primitives match one or more fields on AND or OR, with or without a negation. 
+* Primitives: Primitives match one or more fields on AND or OR, with or without a negation.
 * Modifiers: Modifiers determine how the other properties are treated: negation, field join type, ranges and text searches.
 * Composites: Composites join multiple primitives. The primitives are in an array in the field "terms". See example 7.
 
 ### Primitives
-A primitive is an object with properties that are matched. 
+A primitive is an object with properties that are matched.
 
 * `{name:"John"}` - primitive that checks that the name field is equal to "John"
 
@@ -96,8 +96,8 @@ match the above item.
 {"name":"tom", "_propertySearch": true}
 {"level1.name":"tom", "_propertySearch": true}
 {"level1.level2.name":"tom", "_propertySearch": true}
-{"level4.name":"tom", "_propertySearch": true}
-{"level1.level4.name":"tom", "_propertySearch": true},
+{"level3.name":"tom", "_propertySearch": true}
+{"level1.level3.name":"tom", "_propertySearch": true},
 {"name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
 {"level1.name":"tom", "_propertySearch": true, "_propertySearchDepth": 4}
 ````
@@ -119,7 +119,7 @@ searchjs normally matches exactly the objects and depths you provide. With Prope
 
 
 #### Array Primitive
-If the value of a field in a primitive is an array, then it will accept a match of any one of the array values. 
+If the value of a field in a primitive is an array, then it will accept a match of any one of the array values.
 
 ````JavaScript
 {name:["John","Jack"]} // accepts any record where the name field matches 'John' or 'Jack'
@@ -183,7 +183,7 @@ Just add the field `_join` to the primitive and set it to "OR". If the `_join` f
 #### Text Searching
 In general, if you search a field that is a string, and the search primitive is a string, then it will be an exact match, ignoring case.
 
-`{name:"davi"}` will match a record whose content is `{name:"davi"}`, as well as one whose "name" field matches "Davi" and "DAVID", but not one whose content is `{name:"david"}` or even `{name: "davi abc"}`.
+`{name:"davi"}` will match a record whose content is `{name:"davi"}`, as well as one whose "name" field matches "Davi" and "DAVI", but not one whose content is `{name:"david"}` or even `{name: "davi abc"}`.
 
 If you want a text search that can do partial matches, text searching is here to help!
 
@@ -253,7 +253,7 @@ Composities can be layered inside composites, since each term in `terms` can its
 # searchjs
 
 ## Overview
-searchjs is the reference implementation of jsql. It uses jsql to check if an object matches a query, or to go through a 
+searchjs is the reference implementation of jsql. It uses jsql to check if an object matches a query, or to go through a
 list of objects and return those that match. For now, it uses objects in memory only; in the future, it could be extended
 to other data stores.
 
@@ -271,9 +271,9 @@ Next, require it using:
 
 Make a query. There are three types of searches: object, array of objects, and single value.
 
-* `matchObject(object,jsqlObject)`: matchObject returns boolean true or false, depending on whether or not the given object matches the given search. 
+* `matchObject(object,jsqlObject)`: matchObject returns boolean true or false, depending on whether or not the given object matches the given search.
 * `matchArray(array,jsqlObject)`: matchArray returns an array of items, subset of the passed array, that match match the given search.
-* `matchField(value,comparator,text,word)`: check if a single `value` matches a given comparator. 
+* `matchField(value,comparator,text,word)`: check if a single `value` matches a given comparator.
 
 All objects are stateless. The following examples show how to use matchObject and matchArray. For more details, look at the test.js
 file included with searchjs.
@@ -293,7 +293,7 @@ The argument structure is as follows:
 * `value`: a single value that is to be matched. It can be any item type, including string, number, boolean, array, object, null, undefined.
 * `comparator`: the rule for comparison. See below.
 * `text`: boolean. For strings only, determine whether to allow for `comparator` to exist anywhere in `value`, or if it must be an exact match. See below.
-* `word`: boolean. For strings only, determine whether `comparator` should exist as a single word in `value`, or if it must be an exact match. 
+* `word`: boolean. For strings only, determine whether `comparator` should exist as a single word in `value`, or if it must be an exact match.
 
 ##### String matching
 If `value` is a string, then `comparator`, which also should be a string, can be matched in one of 3 ways:
@@ -335,7 +335,7 @@ The comparator can be one of the following, and match based on the following com
 
 
 ### Override Defaults
- 
+
 Most of the functionality in searchjs has a given set of defaults. If you wish to override those defaults globally, you can do so as follows:
 
 ````JavaScript
@@ -353,8 +353,8 @@ As of this writing, the following defaults can be overridden:
 * word: boolean. Whether string values in searches should match word, i.e. as a complete word as part of the field. Defaults to `false`. If set to `true`, then searching `{name: "Jill"}` will match those whose names are `"Jill"`, `"Hi Jill Smith"`, the equivalent of searching for `{name: "Jill", _word:true}`.
 * separator: The character to use as the separator for deep searching. Defaults to `'.'`. Changing it, for example, to `':'` and then searching for `{"city:Montreal": "Bagels"}` is the equivalent of `{"city:Montreal": "Bagels", _separator: ":"}`.
 * propertySearch: Whether to use deep property matching by default. Defaults to `false`. If set to `true`, then will always do deep property searching. Searching for `{name: "Jill"}` will be the equivalent of `{name: "Jill", _propertySearch: true}`.
-* propertySearchDepth: How deep to do deep property searches by default. Defaults to `-1`, i.e. infinite depth. 
-  
+* propertySearchDepth: How deep to do deep property searches by default. Defaults to `-1`, i.e. infinite depth.
+
 
 At any point, you can reset defaults by doing:
 
@@ -376,4 +376,3 @@ var list = [{name:"John",age:25},{name:"Jill",age:30}];
 matches = SEARCHJS.matchObject(list[0],{name:"Johnny"}); // returns false
 matches = SEARCHJS.matchArray(list,{name:"John"}); // returns [{name:"John",age:25}]
 ````
-
