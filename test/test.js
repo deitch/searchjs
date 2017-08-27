@@ -87,6 +87,8 @@ searches = [
 	{search: {"level3.level4.level6":200, _propertySearch:true, _propertySearchDepth: 6}, results:[6]},
 	{search: {"level6":{gt:100,lt:300}, _propertySearch:true},results:[6]},
 	{search: {"terms":[{"level6":{gt:100}, _propertySearch:true}, {"level1.level6":{lt:300}, _propertySearch:true}]},results:[6]},
+	{search: {name:"bri",_start:true}, results:[1]},
+	{search: {name:"n",_end:true}, results:[1,6]},
 ];
 
 
@@ -205,6 +207,40 @@ describe('searchjs', function(){
 			});
 			it('should match not text with explicit override', function(){
 				search.matchArray(data,{fullname:"alice",_word:false}).should.eql(noword);
+			});
+		});
+		describe('start', function(){
+			var yesword, noword;
+			before(function(){
+				yesword = search.matchArray(data,{fullname:"car",_start:true});
+				noword = search.matchArray(data,{fullname:"cari"});
+				search.setDefaults({start:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match begin text without explicit _start', function(){
+				search.matchArray(data,{fullname:"car"}).should.eql(yesword);
+			});
+			it('should match not begin text with explicit override', function(){
+				search.matchArray(data,{fullname:"alice",_start:false}).should.eql(noword);
+			});
+		});
+		describe('end', function(){
+			var yesword, noword;
+			before(function(){
+				yesword = search.matchArray(data,{fullname:"rie",_end:true});
+				noword = search.matchArray(data,{fullname:"arie"});
+				search.setDefaults({end:true});
+			});
+			after(function () {
+				search.resetDefaults();
+			});
+			it('should match end text without explicit _end', function(){
+				search.matchArray(data,{fullname:"rie"}).should.eql(yesword);
+			});
+			it('should match not begin text with explicit override', function(){
+				search.matchArray(data,{fullname:"arie",_end:false}).should.eql(noword);
 			});
 		});
 		describe('separator', function(){

@@ -191,6 +191,8 @@ There are two variants on text search that can expand your ability to search tex
 
 1. substring: if you set the flag `{_text: true}` as part of your search, then it searches for your match *as part of the field*. In other words, if your search is `{name:"davi", _text:true}` then it will check if the field matches `/davi/i`.
 2. word: if you set the flag `{_word: true}` as part of your search, then it search for your match *as a complete word in the field*. In other words, if your search is `{name:"davi",_word:true}` then it will check if the field matches `/\bdavi\b/i`.
+3. start: if you set the flag `{_start: true}` as part of your search, then it search for your match *as a part of begin of the field*. In other words, if your search is `{name:"davi",_start:true}` then it will check if the field matches `/^davi/i`.
+4. end: if you set the flag `{_word: true}` as part of your search, then it search for your match *as a part end of the field*. In other words, if your search is `{name:"davi",_end:true}` then it will check if the field matches `/davi$/i`.
 
 The `_text` option will override the `_word` option if both exist.
 
@@ -199,6 +201,9 @@ Here are some examples of text searching:
 * `{name:"davi"}` matches all of `{name:"davi"}, {name:"DAvi"}` but none of `{name:"david"}, {name:"abc davi def"}`
 * `{name:"davi",_word:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"abc davi def"}` but none of `{name:"david"}`
 * `{name:"davi",_text:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"abc davi def"}, {name:"abdavideq"}`
+* `{name:"davi",_start:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"davideq"}` but none of `{name:"abc davi def"}`
+* `{name:"davi",_end:true}` matches all of `{name:"asdadavi"}, {name:"asdsadDAvi"}` but none of `{name:"abdavideq"},{name:"abc davi def"}`
+
 
 #### Deep Search Separator
 
