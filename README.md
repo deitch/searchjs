@@ -192,7 +192,7 @@ There are two variants on text search that can expand your ability to search tex
 1. substring: if you set the flag `{_text: true}` as part of your search, then it searches for your match *as part of the field*. In other words, if your search is `{name:"davi", _text:true}` then it will check if the field matches `/davi/i`.
 2. word: if you set the flag `{_word: true}` as part of your search, then it search for your match *as a complete word in the field*. In other words, if your search is `{name:"davi",_word:true}` then it will check if the field matches `/\bdavi\b/i`.
 3. start: if you set the flag `{_start: true}` as part of your search, then it search for your match *as a part of begin of the field*. In other words, if your search is `{name:"davi",_start:true}` then it will check if the field matches `/^davi/i`.
-4. end: if you set the flag `{_word: true}` as part of your search, then it search for your match *as a part end of the field*. In other words, if your search is `{name:"davi",_end:true}` then it will check if the field matches `/davi$/i`.
+4. end: if you set the flag `{_end: true}` as part of your search, then it search for your match *as a part end of the field*. In other words, if your search is `{name:"davi",_end:true}` then it will check if the field matches `/davi$/i`.
 
 The `_text` option will override the `_word` option if both exist.
 

@@ -222,14 +222,20 @@ describe('searchjs', function(){
 			it('should match begin text without explicit _start', function(){
 				search.matchArray(data,{fullname:"car"}).should.eql(yesword);
 			});
-			it('should match not begin text with explicit override', function(){
+			it('should match begin text with explicit _start true', function(){
+				search.matchArray(data,{fullname:"car",_start:true}).should.eql(yesword);
+			});
+			it('should not match text with explicit _start false', function(){
 				search.matchArray(data,{fullname:"alice",_start:false}).should.eql(noword);
+			});
+			it('should not match text _start true but not beginning of word', function(){
+				search.matchArray(data,{fullname:"lice",_start:true}).should.eql(noword);
 			});
 		});
 		describe('end', function(){
 			var yesword, noword;
 			before(function(){
-				yesword = search.matchArray(data,{fullname:"rie",_end:true});
+				yesword = search.matchArray(data,{fullname:"rrie",_end:true});
 				noword = search.matchArray(data,{fullname:"arie"});
 				search.setDefaults({end:true});
 			});
@@ -237,10 +243,16 @@ describe('searchjs', function(){
 				search.resetDefaults();
 			});
 			it('should match end text without explicit _end', function(){
-				search.matchArray(data,{fullname:"rie"}).should.eql(yesword);
+				search.matchArray(data,{fullname:"rrie"}).should.eql(yesword);
 			});
-			it('should match not begin text with explicit override', function(){
-				search.matchArray(data,{fullname:"arie",_end:false}).should.eql(noword);
+			it('should match end text with explicit _end true', function(){
+				search.matchArray(data,{fullname:"rrie", _end:true}).should.eql(yesword);
+			});
+			it('should not match text with explicit _end false', function(){
+				search.matchArray(data,{fullname:"rrie",_end:false}).should.eql(noword);
+			});
+			it('should not match text _end true but not end of word', function(){
+				search.matchArray(data,{fullname:"rri",_end:true}).should.eql(noword);
 			});
 		});
 		describe('separator', function(){
