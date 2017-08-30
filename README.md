@@ -249,12 +249,13 @@ Composities can be layered inside composites, since each term in `terms` can its
 12. `{_not:true, email:["john@foo.com","jf@gmail.com"]}` - all records that have (email !== "john@foo.com" && email !== "jf@gmail.com") OR email in the record is an array, and not one single value in that array is "john@foo.com" or "jf@gmail.com"
 13. `{age: 30}` - all records that have age === 30
 14. `{age: 30, _not: true}` - all records that have age !== 30
-14. `{age: {from:30, to:35}}` - all records that have age >= 30 && age <=35
-14. `{age: {gt:30, lt:35}}` - all records that have age >= 30 && age <=35
-14. `{_not: true, age: {from:30, to:35}}` - all records that have age !(>= 30 && age <=35) i.e. age < 30 || age > 35
-15. `{name: "John", age: {from:30, to:35}}` - all records that have name === "John" && age >= 30 && age <=35
-15. `{_not: true, name: "John", age: {from:30, to:35}}` - all records that have name !== "John" && age !(>= 30 && age <=35)
-15. `{terms:[{name: "John"}, {_not: true, age: {from:30, to:35}}]}` - all records that have name === "John" && age !(>= 30 && age <=35)
+15. `{age: {from:30, to:35}}` - all records that have age >= 30 && age <=35
+16. `{age: {gte:30, lte:35}}` - all records that have age >= 30 && age <=35
+17. `{age: {gt:30, lt:35}}` - all records that have age > 30 && age <35
+18. `{_not: true, age: {from:30, to:35}}` - all records that have age !(>= 30 && age <=35) i.e. age < 30 || age > 35
+19. `{name: "John", age: {from:30, to:35}}` - all records that have name === "John" && age >= 30 && age <=35
+20. `{_not: true, name: "John", age: {from:30, to:35}}` - all records that have name !== "John" && age !(>= 30 && age <=35)
+21. `{terms:[{name: "John"}, {_not: true, age: {from:30, to:35}}]}` - all records that have name === "John" && age !(>= 30 && age <=35)
 
 
 # searchjs
