@@ -33,7 +33,7 @@ Multiple fields in a primitive are, by default, joined by logical AND. See under
 
 The name of a field in a primitive is *always* the name of the field to match in the record. The value can be one of:
 
-* Basic types: string, number - will match directly against the value in the record. Case is **ignored** in string matches.
+* Basic types: string, number, date - will match directly against the value in the record. Case is **ignored** in string matches.
 * Array: will match against any one of the values in the array. See below.
 * Object: will look for a range. See below.
 
@@ -298,7 +298,7 @@ matches = s.matchField(list[0].name,"John"); // returns true
 
 The argument structure is as follows:
 
-* `value`: a single value that is to be matched. It can be any item type, including string, number, boolean, array, object, null, undefined.
+* `value`: a single value that is to be matched. It can be any item type, including string, number, date, boolean, array, object, null, undefined.
 * `comparator`: the rule for comparison. See below.
 * `text`: boolean. For strings only, determine whether to allow for `comparator` to exist anywhere in `value`, or if it must be an exact match. See below.
 * `word`: boolean. For strings only, determine whether `comparator` should exist as a single word in `value`, or if it must be an exact match.
@@ -332,7 +332,8 @@ The comparator can be one of the following, and match based on the following com
 * `true`: match if `value === true` (no casting is done, precise match)
 * `false`: match if `value === false` (no casting is done, precise match)
 * `number`: match if `value === comparator` (no casting is done, precise match)
-* `object` with range for numeric `value`: `{from: 12, to: 25}` or `{gt: 11, lt: 26}`. Match if `typeof(value) === "number"` and `value` is in the given range.
+* `date`: match if `value === comparator` (no casting is done, use .getTime() for precise match)
+* `object` with range for numeric or date `value`: `{from: 12, to: 25}` or `{gt: 11, lt: 26}`. Match if `typeof(value) === "number"` and `value` is in the given range.
 * `string`: match if one of the following conditions is true:
     * (`typeof(value) === "string"`) and (`value === comparator`)
     * (`typeof(value) === "string"`) and (`value` contains `comparator`) and (`text === true`)

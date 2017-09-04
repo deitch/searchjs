@@ -4,11 +4,11 @@ var search = require("../lib/searchjs"), should = require('should');
 var data, searches;
 
 data = [
-	{name:"Alice",fullname:"I am Alice Shiller",age:25, email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" }, emptyArray2: [] }, emptyArray1: [] },
-	{name:"Brian",age:30, email: "brian@searchjs.com",male:true,empty:"hello"},
-	{name:"Carrie",age:30, email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
-	{name:"David",age:35, email: "david@searchjs.com",male:true, personal: {cars: [{brand: 'Porsche', build: 2016}, {brand: 'BMW', build: 2014}]}},
-	{name:"Alice",age:30, email: ["alice@searchjs.com","alice@gmail.com"], cars: [{brand: 'BMW', build: 2015, cds: [{title:'Best Of 2015'}, {title:'Best Of 2016'}]}, {brand: 'Porsche', build: 2013}]},
+	{name:"Alice",fullname:"I am Alice Shiller",age:25,birthday: new Date(1992, 1, 28),email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" }, emptyArray2: [] }, emptyArray1: [] },
+	{name:"Brian",age:30,birthday: new Date(1987, 10, 16),email: "brian@searchjs.com",male:true,empty:"hello"},
+	{name:"Carrie",age:30,birthday: new Date(1987, 5, 9), email: "carrie@searchjs.com",city:{"Montreal":true,"New York":false}},
+	{name:"David",age:35,birthday: new Date(1982, 9, 17), email: "david@searchjs.com",male:true, personal: {cars: [{brand: 'Porsche', build: 2016}, {brand: 'BMW', build: 2014}]}},
+	{name:"Alice",age:30,birthday: new Date(1987, 6, 10), email: ["alice@searchjs.com","alice@gmail.com"], cars: [{brand: 'BMW', build: 2015, cds: [{title:'Best Of 2015'}, {title:'Best Of 2016'}]}, {brand: 'Porsche', build: 2013}]},
 	{name:"Other",id: 3,currentC: {cer: {id: 2}}},
 	{name:"John", "level1":{"level2":{"level3":{"level4":{"level5":{"level6": 200}}}}}}
 ];
@@ -38,6 +38,7 @@ searches = [
 	{search: {_not:true, email: ["alice@searchjs.com","carrie@searchjs.com"]},results: [1,3,5,6]},
 	{search: {city:"Montreal"},results:[0,2]},
 	{search: {_not:true,city:"Montreal"},results:[1,3,4,5,6]},
+	// Number
 	{search: {age:{from:30}},results:[1,2,3,4]},
 	{search: {age:{gte:30}},results:[1,2,3,4]},
 	{search: {age:{from:30,to:34}},results:[1,2,4]},
@@ -51,6 +52,19 @@ searches = [
 	{search: {age:{gt:25,lt:35}},results:[1,2,4]},
 	{search: {_not:true,age:{to:29}},results:[1,2,3,4,5,6]},
 	{search: {_not:true,age:{from:30,to:34}},results:[0,3,5,6]},
+	// Date
+	{search: {birthday: new Date(1992, 1, 28)}, results:[0]},
+	{search: {birthday:{from: new Date(1985, 9, 17)}},results:[0,1,2,4]},
+	{search: {birthday:{gte:new Date(1982, 9, 17)}},results:[0,1,2,3,4]},
+	{search: {birthday:{from:new Date(1981, 9, 17),to:new Date(1995, 1, 28)}},results:[0,1,2,3,4]},
+	{search: {birthday:{gte:new Date(1982, 9, 17),lte:new Date(1992, 1, 28)}},results:[0,1,2,3,4]},
+	{search: {birthday:{to:new Date(1987, 5, 7)}},results:[3]},
+	{search: {birthday:{lte:new Date(1987, 5, 9)}},results:[2,3]},
+	{search: {birthday:{gt:new Date(1987, 5, 9)}},results:[0,1,4]},
+	{search: {birthday:{lt:new Date(1987, 5, 9)}},results:[3]},
+	{search: {birthday:{gt:new Date(1982, 9, 17),lt:new Date(1992, 1, 28)}},results:[1,2,4]},
+	{search: {_not:true,birthday:{to:new Date(1987, 5, 9)}},results:[0,1,4,5,6]},
+	{search: {_not:true,birthday:{from:new Date(1987, 5, 9),to:new Date(1987, 10, 16)}},results:[0,3,5,6]},
 	{search: {"city.Montreal":"first"},results:[0]},
 	{search: {"city.Montreal":["first","abc"]},results:[0]},
 	{search: {"city:Montreal":"first",_separator: ':'},results:[0]},
@@ -91,7 +105,7 @@ searches = [
 	{search: {"level6":{gte:100,lte:300}, _propertySearch:true},results:[6]},
 	{search: {"terms":[{"level6":{gte:100}, _propertySearch:true}, {"level1.level6":{lte:300}, _propertySearch:true}]},results:[6]},
 	{search: {name:"bri",_start:true}, results:[1]},
-	{search: {name:"n",_end:true}, results:[1,6]},
+	{search: {name:"n",_end:true}, results:[1,6]}
 ];
 
 
