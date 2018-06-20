@@ -1,0 +1,20 @@
+{
+  "env": {
+    "prod": {
+      "presets": [
+        [
+          "env",
+          {
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": [
+        "external-helpers"
+      ]
+    },
+    "test": {
+      "presets": ["env"]
+    }
+  }
+}
