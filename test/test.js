@@ -1,6 +1,6 @@
 /*jslint node:true, nomen:true */
 /*global it, describe, before, after */
-var search = require("../lib/searchjs"), should = require('should');
+var search = require("../src/searchjs"), should = require('should');
 var data, searches;
 
 data = [
