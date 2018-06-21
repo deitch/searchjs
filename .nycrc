@@ -1,0 +1,12 @@
+{
+  "reporter": [
+    "lcov",
+    "html",
+    "text"
+  ],
+  "include": ["src/*.js"],
+  "exclude": ["lib/*.js", "test/*.js"],
+  "all": true ,
+  "require": [
+  ]
+}

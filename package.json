@@ -49,7 +49,7 @@
     "build": "NODE_ENV=prod rollup -c > ./lib/searchjs.js && npm run uglify",
     "uglify": "uglifyjs ./lib/searchjs.js --compress --mangle --comments -o ./lib/searchjs.min.js",
     "test": "NODE_ENV=test mocha --require babel-register ./test/test.js --reporter spec",
-    "coverage": "nyc --per-file --reporter=text --reporter=html --reporter=lcov npm test"
+    "coverage": "nyc npm test"
   },
   "dependencies": {}
 }
