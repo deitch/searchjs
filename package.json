@@ -36,6 +36,7 @@
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "mocha": "^5.2.0",
     "rollup": "^0.60.7",
     "rollup-plugin-babel": "^3.0.4",
@@ -45,7 +46,7 @@
   "scripts": {
     "build": "NODE_ENV=prod rollup -c > ./lib/searchjs.js && npm run uglify",
     "uglify": "uglifyjs ./lib/searchjs.js --compress --mangle --comments -o ./lib/searchjs.min.js",
-    "test": "NODE_ENV=test mocha --compilers js:babel-core/register ./test/test.js --reporter spec"
+    "test": "NODE_ENV=test mocha --require babel-register ./test/test.js --reporter spec"
   },
   "dependencies": {}
 }
