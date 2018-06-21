@@ -1,7 +1,8 @@
 /*jslint node:true, nomen:true */
 /*global it, describe, before, after */
-var search = require("../lib/searchjs"), should = require('should');
-var data, searches;
+import {matchObject, matchArray, setDefaults, resetDefaults} from "../src/searchjs";
+const should = require('should');
+let data, searches;
 
 data = [
 	{name:"Alice",fullname:"I am Alice Shiller",age:25,birthday: new Date(1992, 1, 28),email: "alice@searchjs.com",city:{"Montreal":"first","Toronto":"second"}, other: { personal: { birthPlace: "Vancouver" }, emptyArray2: [] }, emptyArray1: [] },
@@ -109,8 +110,8 @@ searches = [
 ];
 
 
-describe('searchjs', function(){
-	describe('without defaults', function(){
+describe('searchjs', () => {
+	describe('without defaults', () => {
 		var i, j, m, hash, arrayResults, entry;
 		// we will go through each search
 		for (i=0;i<searches.length;i++) {
@@ -135,7 +136,7 @@ describe('searchjs', function(){
 							(function (d,h) {
 								var isNot = (h?"":"NOT ");
 								it('should '+isNot+"match for data "+JSON.stringify(d), function(){
-									m = search.matchObject(d,entry.search);
+									m = matchObject(d,entry.search);
 									// it should be a match or not
 									m.should.eql(h);
 								});
@@ -145,7 +146,7 @@ describe('searchjs', function(){
 					describe('matchArray', function(){
 						it('should match only '+JSON.stringify(arrayResults), function(){
 							// next do the array matches - match against the entire data set, and expect the results to match our results
-							m = search.matchArray(data,entry.search);
+							m = matchArray(data,entry.search);
 							// check the results - we need to find a way to match the entries of two arrays of objects
 							//  easiest is probably to just json-ify them and compare the strings
 							m.should.eql(arrayResults);
@@ -157,169 +158,169 @@ describe('searchjs', function(){
 	});
 
 	// defaults has many more permutations, so we are structuring it manually
-	describe('with defaults', function(){
-		describe('negator', function(){
-			var nonot, yesnot;
+	describe('with defaults', () => {
+		describe('negator', () => {
+			let nonot, yesnot;
 			before(function(){
-				yesnot = search.matchArray(data,{name:"alice",_not:true});
-				nonot = search.matchArray(data,{name:"alice",_not:false});
-				search.setDefaults({negator:true});
+				yesnot = matchArray(data,{name:"alice",_not:true});
+				nonot = matchArray(data,{name:"alice",_not:false});
+				setDefaults({negator:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match NOT without explicit _not', function(){
-				search.matchArray(data,{name:"alice"}).should.eql(yesnot);
+				matchArray(data,{name:"alice"}).should.eql(yesnot);
 			});
 			it('should match true with explicit override', function(){
-				search.matchArray(data,{name:"alice",_not:false}).should.eql(nonot);
+				matchArray(data,{name:"alice",_not:false}).should.eql(nonot);
 			});
 		});
-		describe('join', function(){
+		describe('join', () => {
 			var joinand, joinor;
 			before(function(){
-				joinand = search.matchArray(data,{age:25, name: "Alice"});
-				joinor = search.matchArray(data,{age:25, name: "Alice",_join:"OR"});
-				search.setDefaults({join:"OR"});
+				joinand = matchArray(data,{age:25, name: "Alice"});
+				joinor = matchArray(data,{age:25, name: "Alice",_join:"OR"});
+				setDefaults({join:"OR"});
 			});
-			after(function () {
-				search.resetDefaults();
+			after(() => {
+				resetDefaults();
 			});
 			it('should match OR without explicit OR', function(){
-				search.matchArray(data,{name:"alice","age":25}).should.eql(joinor);
+				matchArray(data,{name:"alice","age":25}).should.eql(joinor);
 			});
 			it('should match AND with explicit override', function(){
-				search.matchArray(data,{name:"alice","age":25,_join:"AND"}).should.eql(joinand);
+				matchArray(data,{name:"alice","age":25,_join:"AND"}).should.eql(joinand);
 			});
 		});
-		describe('text', function(){
-			var yestext, notext;
+		describe('text', () => {
+			let yestext, notext;
 			before(function(){
-				yestext = search.matchArray(data,{name:"alic",_text:true});
-				notext = search.matchArray(data,{name:"alic"});
-				search.setDefaults({text:true});
+				yestext = matchArray(data,{name:"alic",_text:true});
+				notext = matchArray(data,{name:"alic"});
+				setDefaults({text:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match text without explicit _text', function(){
-				search.matchArray(data,{name:"alic"}).should.eql(yestext);
+				matchArray(data,{name:"alic"}).should.eql(yestext);
 			});
 			it('should match not text with explicit override', function(){
-				search.matchArray(data,{name:"alic",_text:false}).should.eql(notext);
+				matchArray(data,{name:"alic",_text:false}).should.eql(notext);
 			});
 		});
-		describe('word', function(){
-			var yesword, noword;
+		describe('word', () => {
+			let yesword, noword;
 			before(function(){
-				yesword = search.matchArray(data,{fullname:"alice",_word:true});
-				noword = search.matchArray(data,{fullname:"alice"});
-				search.setDefaults({word:true});
+				yesword = matchArray(data,{fullname:"alice",_word:true});
+				noword = matchArray(data,{fullname:"alice"});
+				setDefaults({word:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match text without explicit _text', function(){
-				search.matchArray(data,{fullname:"alice"}).should.eql(yesword);
+				matchArray(data,{fullname:"alice"}).should.eql(yesword);
 			});
 			it('should match not text with explicit override', function(){
-				search.matchArray(data,{fullname:"alice",_word:false}).should.eql(noword);
+				matchArray(data,{fullname:"alice",_word:false}).should.eql(noword);
 			});
 		});
-		describe('start', function(){
-			var yesword, noword;
+		describe('start', () => {
+			let yesword, noword;
 			before(function(){
-				yesword = search.matchArray(data,{fullname:"car",_start:true});
-				noword = search.matchArray(data,{fullname:"cari"});
-				search.setDefaults({start:true});
+				yesword = matchArray(data,{fullname:"car",_start:true});
+				noword = matchArray(data,{fullname:"cari"});
+				setDefaults({start:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match begin text without explicit _start', function(){
-				search.matchArray(data,{fullname:"car"}).should.eql(yesword);
+				matchArray(data,{fullname:"car"}).should.eql(yesword);
 			});
 			it('should match begin text with explicit _start true', function(){
-				search.matchArray(data,{fullname:"car",_start:true}).should.eql(yesword);
+				matchArray(data,{fullname:"car",_start:true}).should.eql(yesword);
 			});
 			it('should not match text with explicit _start false', function(){
-				search.matchArray(data,{fullname:"alice",_start:false}).should.eql(noword);
+				matchArray(data,{fullname:"alice",_start:false}).should.eql(noword);
 			});
 			it('should not match text _start true but not beginning of word', function(){
-				search.matchArray(data,{fullname:"lice",_start:true}).should.eql(noword);
+				matchArray(data,{fullname:"lice",_start:true}).should.eql(noword);
 			});
 		});
-		describe('end', function(){
-			var yesword, noword;
+		describe('end', () => {
+			let yesword, noword;
 			before(function(){
-				yesword = search.matchArray(data,{fullname:"rrie",_end:true});
-				noword = search.matchArray(data,{fullname:"arie"});
-				search.setDefaults({end:true});
+				yesword = matchArray(data,{fullname:"rrie",_end:true});
+				noword = matchArray(data,{fullname:"arie"});
+				setDefaults({end:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match end text without explicit _end', function(){
-				search.matchArray(data,{fullname:"rrie"}).should.eql(yesword);
+				matchArray(data,{fullname:"rrie"}).should.eql(yesword);
 			});
 			it('should match end text with explicit _end true', function(){
-				search.matchArray(data,{fullname:"rrie", _end:true}).should.eql(yesword);
+				matchArray(data,{fullname:"rrie", _end:true}).should.eql(yesword);
 			});
 			it('should not match text with explicit _end false', function(){
-				search.matchArray(data,{fullname:"rrie",_end:false}).should.eql(noword);
+				matchArray(data,{fullname:"rrie",_end:false}).should.eql(noword);
 			});
 			it('should not match text _end true but not end of word', function(){
-				search.matchArray(data,{fullname:"rri",_end:true}).should.eql(noword);
+				matchArray(data,{fullname:"rri",_end:true}).should.eql(noword);
 			});
 		});
-		describe('separator', function(){
-			var matches;
+		describe('separator', () => {
+			let matches;
 			before(function(){
-				matches = search.matchArray(data,{"city.Montreal":"first"});
-				search.setDefaults({separator:":"});
+				matches = matchArray(data,{"city.Montreal":"first"});
+				setDefaults({separator:":"});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match field without explicit separator', function(){
-				search.matchArray(data,{"city:Montreal":"first"}).should.eql(matches);
+				matchArray(data,{"city:Montreal":"first"}).should.eql(matches);
 			});
 			it('should match field with explicit separator override', function(){
-				search.matchArray(data,{"city.Montreal":"first",_separator:"."}).should.eql(matches);
+				matchArray(data,{"city.Montreal":"first",_separator:"."}).should.eql(matches);
 			});
 		});
-		describe('propertySearch', function(){
-			var yesdeep, nodeep;
+		describe('propertySearch', () => {
+			let yesdeep, nodeep;
 			before(function(){
-				yesdeep = search.matchArray(data,{"Montreal":"first",_propertySearch:true});
-				nodeep = search.matchArray(data,{"Montreal":"first"});
-				search.setDefaults({propertySearch:true});
+				yesdeep = matchArray(data,{"Montreal":"first",_propertySearch:true});
+				nodeep = matchArray(data,{"Montreal":"first"});
+				setDefaults({propertySearch:true});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match field without explicit _propertySearch', function(){
-				search.matchArray(data,{"Montreal":"first"}).should.eql(yesdeep);
+				matchArray(data,{"Montreal":"first"}).should.eql(yesdeep);
 			});
 			it('should not match field with explicit _propertySearch override', function(){
-				search.matchArray(data,{"Montreal":"first",_propertySearch:false}).should.eql(nodeep);
+				matchArray(data,{"Montreal":"first",_propertySearch:false}).should.eql(nodeep);
 			});
 		});
-		describe('propertySearchDepth', function(){
-			var yesdepth, nodepth;
+		describe('propertySearchDepth', () => {
+			let yesdepth, nodepth;
 			before(function(){
-				yesdepth = search.matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth: 2});
-				nodepth = search.matchArray(data,{"brand":"bmw",_propertySearch:true});
-				search.setDefaults({propertySearchDepth:2});
+				yesdepth = matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth: 2});
+				nodepth = matchArray(data,{"brand":"bmw",_propertySearch:true});
+				setDefaults({propertySearchDepth:2});
 			});
 			after(function () {
-				search.resetDefaults();
+				resetDefaults();
 			});
 			it('should match correct fields without explicit _propertySearchDepth', function(){
-				search.matchArray(data,{"brand":"bmw",_propertySearch:true}).should.eql(yesdepth);
+				matchArray(data,{"brand":"bmw",_propertySearch:true}).should.eql(yesdepth);
 			});
 			it('should not match field with explicit _propertySearch override', function(){
-				search.matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth:-1}).should.eql(nodepth);
+				matchArray(data,{"brand":"bmw",_propertySearch:true,_propertySearchDepth:-1}).should.eql(nodepth);
 			});
 		});
 	});
