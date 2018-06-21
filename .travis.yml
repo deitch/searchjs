@@ -2,5 +2,6 @@ language: node_js
 node_js:
   - "8.9.4"
 script:
-  - npm run build
-  - npm test
+  - npm run coverage
+after_success:
+  - codecov
