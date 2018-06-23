@@ -1,6 +1,7 @@
 import {toType, deepField} from './util';
+import {_getOptions} from './option';
 
-export var _defaults = {};
+let _defaults = {};
 
 // Allows to overwrite the global default values
 export function setDefaults(options) {
@@ -40,7 +41,6 @@ export function singleMatch(field,s,text,word,start,end) {
 			} else {
 				oneMatch = field === s;
 			}
-
 		}
 	} else if (t === "string") {
 		if (typeof(s) === "string") {
@@ -61,8 +61,6 @@ export function singleMatch(field,s,text,word,start,end) {
 		} else {
 			oneMatch = s === field;
 		}
-	} else if (t === "boolean") {
-		oneMatch = typeof(s) === "boolean" && s === field;
 	} else if (field.length !== undefined) {
 	  // array, so go through each
 	  for (j=0;j<field.length;j++) {
@@ -78,7 +76,7 @@ export function singleMatch(field,s,text,word,start,end) {
 }
 
 export function matchArray(ary,search) {
-	let matched = false, i, ret = [], options = _getOptions(search);
+	let matched = false, i, ret = [], options = _getOptions(search, _defaults);
 	if (ary && ary.length > 0) {
 		for (i=0;i<ary.length;i++) {
 			matched = _matchObj(ary[i],search,options);
@@ -91,46 +89,8 @@ export function matchArray(ary,search) {
 }
 
 export function matchObject(obj,search) {
-	const options = _getOptions(search);
+	const options = _getOptions(search, _defaults);
 	return _matchObj(obj,search,options);
-}
-
-function _getSingleOpt(first,override,fallback) {
-	let ret;
-	if (first !== undefined) {
-		ret = first;
-	} else if (override !== undefined) {
-		ret = override;
-	} else {
-		ret = fallback;
-	}
-	return ret;
-}
-
-function _getOptions(search) {
-const options = {};
-
-search = search || {};
-
-// did we have a negator?
-//options.negator = search._not ? true : _defaults.negator || false;
-options.negator = _getSingleOpt(search._not,_defaults.negator,false);
-// do we join via AND or OR
-//options.joinAnd = search._join && search._join === "OR" ? false : _defaults.join || true;
-options.joinAnd = _getSingleOpt(search._join, _defaults.join, "AND") !== "OR";
-
-// did we have text, word, start or end search?
-options.text = _getSingleOpt(search._text,_defaults.text,false);
-options.word = _getSingleOpt(search._word,_defaults.word,false);
-options.start = _getSingleOpt(search._start,_defaults.start,false);
-options.end = _getSingleOpt(search._end,_defaults.end,false);
-
-options.separator = search._separator || _defaults.separator || '.';
-options.propertySearch = _getSingleOpt(search._propertySearch,_defaults.propertySearch,false);
-options.propertySearchDepth = _getSingleOpt(search._propertySearchDepth,_defaults.propertySearchDepth,-1);
-
-
-return options;
 }
 
 function _matchObj(obj,search,options) {
@@ -161,15 +121,15 @@ function _matchObj(obj,search,options) {
 		// match to the search field
 		for(i in search) {
 			if (search.hasOwnProperty(i) && i.indexOf("_") !== 0) {
-	  // match each one, if search[i] is an array - just concat to be safe
+	  			// match each one, if search[i] is an array - just concat to be safe
 				searchTermParts = i.split(options.separator);
-			  ary = [].concat(search[i]);
-			for (j=0;j<ary.length;j++) {
+			  	ary = [].concat(search[i]);
+			  	for (j=0;j<ary.length;j++) {
 					oneMatch = singleMatch(deepField(obj,searchTermParts,options.propertySearch,options.propertySearchDepth),ary[j],options.text,options.word,options.start,options.end);
-		if (oneMatch) {
-		  break;
-		}
-	  }
+					if (oneMatch) {
+		  				break;
+					}
+	  			}
 				// negator
 				if (options.negator) {
 					oneMatch = !oneMatch;

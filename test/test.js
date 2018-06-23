@@ -112,7 +112,7 @@ searches = [
 
 describe('searchjs', () => {
 	describe('without defaults', () => {
-		var i, j, m, hash, arrayResults, entry;
+		let i, j, m, hash, arrayResults, entry;
 		// we will go through each search
 		for (i=0;i<searches.length;i++) {
 			// turn the results array into a hash
@@ -134,7 +134,7 @@ describe('searchjs', () => {
 					describe('matchObject', function(){
 						for (j=0; j<data.length;j++) {
 							(function (d,h) {
-								var isNot = (h?"":"NOT ");
+								let isNot = (h?"":"NOT ");
 								it('should '+isNot+"match for data "+JSON.stringify(d), function(){
 									m = matchObject(d,entry.search);
 									// it should be a match or not
@@ -177,7 +177,7 @@ describe('searchjs', () => {
 			});
 		});
 		describe('join', () => {
-			var joinand, joinor;
+			let joinand, joinor;
 			before(function(){
 				joinand = matchArray(data,{age:25, name: "Alice"});
 				joinor = matchArray(data,{age:25, name: "Alice",_join:"OR"});

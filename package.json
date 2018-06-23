@@ -40,15 +40,16 @@
     "codecov": "^3.0.2",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
-    "rollup": "^0.60.7",
-    "rollup-plugin-babel": "^3.0.4",
+    "rollup": "^0.61.2",
+    "rollup-plugin-babel": "^3.0.5",
     "should": "^13.2.1",
     "uglify-js": "^3.4.1"
   },
   "scripts": {
-    "build": "NODE_ENV=prod rollup -c > ./lib/searchjs.js && npm run uglify",
+    "build": "NODE_ENV=prod rollup -c && npm run uglify",
     "uglify": "uglifyjs ./lib/searchjs.js --compress --mangle --comments -o ./lib/searchjs.min.js",
     "test": "NODE_ENV=test mocha --require babel-register ./test/test.js --reporter spec",
+    "test-watch": "NODE_ENV=test mocha --watch --require babel-register ./test/test.js --reporter spec",
     "coverage": "nyc npm test"
   },
   "dependencies": {}
