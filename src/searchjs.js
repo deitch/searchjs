@@ -18,6 +18,10 @@ export function singleMatch(field,s,text,word,start,end) {
 	let oneMatch = false, t, re, j, from, to;
 	// for numbers, exact match; for strings, ignore-case match; for anything else, no match
 	t = typeof(field);
+	if (t === "string" && !isNaN(field)) {
+		// If the type is a string and it’s a number inside of the string, set as number
+		t = "number";
+	}
 	if (field === null) {
 		oneMatch = s === null;
 	} else if (field === undefined) {
