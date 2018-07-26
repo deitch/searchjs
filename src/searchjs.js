@@ -58,6 +58,16 @@ export function singleMatch(field,s,text,word,start,end) {
 		} else if (end) {
 			re = new RegExp(s+"$" , "i");
 			oneMatch = field && field.match(re) !== null;
+		} else if (s !== null && s !== undefined && toType(s) === "object") {
+				if (s.from !== undefined || s.to !== undefined || s.gte !== undefined || s.lte !== undefined) {
+					from = s.from || s.gte;
+					to = s.to || s.lte;
+					oneMatch = (s.from !== undefined || s.gte !== undefined ? field >= from : true) &&
+						(s.to !== undefined || s.lte !== undefined ? field <= to: true);
+				} else if (s.gt !== undefined || s.lt !== undefined) {
+					oneMatch = (s.gt !== undefined ? field > s.gt : true) &&
+						(s.lt !== undefined ? field < s.lt: true);
+				}
 		} else {
 			oneMatch = s === field;
 		}

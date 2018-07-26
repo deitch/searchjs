@@ -106,7 +106,15 @@ searches = [
 	{search: {"level6":{gte:100,lte:300}, _propertySearch:true},results:[6]},
 	{search: {"terms":[{"level6":{gte:100}, _propertySearch:true}, {"level1.level6":{lte:300}, _propertySearch:true}]},results:[6]},
 	{search: {name:"bri",_start:true}, results:[1]},
-	{search: {name:"n",_end:true}, results:[1,6]}
+	{search: {name:"n",_end:true}, results:[1,6]},
+	{search: {name:{gt:'d'}},results:[3,5,6]},
+	{search: {name:{gt:'da'}},results:[3,5,6]},
+	{search: {name:{gt:'db'}},results:[5,6]},
+	{search: {name:{lt:'d'}},results:[0,1,2,4]},
+	{search: {name:{lt:'cb'}},results:[0,1,2,4]},
+	{search: {name:{from:'d',to:'e'}},results:[3]},
+	{search: {name:{from:'br',to:'cb'}},results:[1,2]},
+	{search: {name:{from:'bs',to:'cb'}},results:[2]},
 ];
 
 
