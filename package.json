@@ -1,9 +1,10 @@
 {
   "name": "searchjs",
   "description": "A library for filtering JavaScript objects based on a json SQL-like language, jsql",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "url": "http://github.com/deitch/searchjs",
   "author": "Avi Deitcher (https://github.com/deitch)",
+  "license": "MIT",
   "contributors": [
     {
       "name": "Avi Deitcher",
