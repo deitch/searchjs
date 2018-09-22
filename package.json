@@ -52,6 +52,7 @@
   },
   "scripts": {
     "build": "NODE_ENV=prod rollup -c && npm run uglify",
+    "prepublishOnly": "npm build",
     "uglify": "uglifyjs ./lib/searchjs.js --compress --mangle --comments -o ./lib/searchjs.min.js",
     "test": "NODE_ENV=test mocha --require babel-register ./test/test.js --reporter spec",
     "test-watch": "NODE_ENV=test mocha --watch --require babel-register ./test/test.js --reporter spec",
