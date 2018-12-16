@@ -33,7 +33,7 @@ export function deepField(data,propertyPath,propertySearch,propertySearchDepth) 
 			itemValue = deepField(data[i], copyPropertyPath, propertySearch, newPropertySearchDepth-1);
 
 			// We return all the values that match
-			if (itemValue) {
+			if (itemValue !== null) {
 				ret.push(itemValue);
 			}
 		}
