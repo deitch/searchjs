@@ -319,13 +319,13 @@ Note that `text` overrides `word` if both are set to `true`.
 Examples:
 
 ````javascript
-matchFiled("This is a cool program","progr"); // false
-matchFiled("This is a cool program","progr",false,false); // false
-matchFiled("This is a cool program","progr",false); // false
-matchFiled("This is a cool program","progr"); // false
-matchFiled("This is a cool program","progr", true); // true
-matchFiled("This is a cool program","program",false,true); // true
-matchFiled("This is a cool program","This is a cool program"); // true
+matchField("This is a cool program","progr"); // false
+matchField("This is a cool program","progr",false,false); // false
+matchField("This is a cool program","progr",false); // false
+matchField("This is a cool program","progr"); // false
+matchField("This is a cool program","progr", true); // true
+matchField("This is a cool program","program",false,true); // true
+matchField("This is a cool program","This is a cool program"); // true
 ````
 
 ##### Comparator
