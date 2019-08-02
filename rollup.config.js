@@ -10,14 +10,9 @@ export default {
 		banner: `/* @license searchjs | (c) Searchjs Team and other contributors | https://github.com/deitch/searchjs */`
 	},
 	plugins: [babel({
-		presets: [['es2015', {
+		presets: [['@babel/preset-env', {
 			modules: false
 		}],
-			['env', {
-				modules: false
-			}]],
-		plugins: [
-			'external-helpers'
 		],
 	})]
 };
