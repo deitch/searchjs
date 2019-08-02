@@ -3,18 +3,15 @@
     "prod": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "modules": false
           }
         ]
-      ],
-      "plugins": [
-        "external-helpers"
       ]
     },
     "test": {
-      "presets": ["env"]
+      "presets": ["@babel/preset-env"]
     }
   }
 }
