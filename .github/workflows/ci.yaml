@@ -55,6 +55,8 @@ jobs:
       with:
         node-version: '10.x'
         registry-url: 'https://registry.npmjs.org'
+    - name: install
+      run: npm install
     - name: deploy
       if: github.event_name == 'push' && endsWith(github.ref,'/master')
       run: npm publish
