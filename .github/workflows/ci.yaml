@@ -1,0 +1,26 @@
+name: Continuous Integration
+on: 
+ pull_request:
+   types: [opened, synchronize, reopened]
+ push:
+   branches:
+     - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: install
+      run: npm install
+    - name: build
+      run: npm run build
+    - name: coverage
+      run: npm run coverage
+      
