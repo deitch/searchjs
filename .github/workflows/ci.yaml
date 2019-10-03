@@ -7,6 +7,15 @@ on:
      - master
 
 jobs:
+  report:
+    name: Report
+    runs-on: ubuntu-latest
+    steps:
+    - name: ref
+      run: echo ${{ github.ref }} 
+    - name: event_name
+      run: echo ${{ github.event_name }} 
+
   build:
     name: Build
     runs-on: ubuntu-latest
