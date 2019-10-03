@@ -33,7 +33,7 @@ jobs:
     - name: coverage
       run: npm run coverage
     - name: Upload coverage to Codecov  
-      if: github.event_name == 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && endsWith(github.ref,'/master')
       uses: codecov/codecov-action@v1.0.2
       # should not need token as it is a public repo
       with:
@@ -47,16 +47,16 @@ jobs:
     needs: build
     steps:
     - name: checkout
-      if: github.event_name == 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && endsWith(github.ref,'/master')
       uses: actions/checkout@v1
     - name: setup node
-      if: github.event_name == 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && endsWith(github.ref,'/master')
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
         registry-url: 'https://registry.npmjs.org'
     - name: deploy
-      if: github.event_name == 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && endsWith(github.ref,'/master')
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
