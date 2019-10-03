@@ -1,6 +1,6 @@
 # jsql
 
-[![Build Status](https://travis-ci.com/deitch/searchjs.svg?branch=master)](https://travis-ci.com/deitch/searchjs)
+![Build Status](https://github.com/deitch/searchjs/workflows/Continuous%20Integration/badge.svg)
 
 [![codecov](https://codecov.io/gh/deitch/searchjs/branch/master/graph/badge.svg)](https://codecov.io/gh/deitch/searchjs)
 
