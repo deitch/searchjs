@@ -14,7 +14,7 @@ export function resetDefaults() {
 	_defaults = {};
 }
 
-export function singleMatch(field,s,text,word,start,end) {
+export function singleMatch(field,s,text,word,regexp,start,end) {
 	let oneMatch = false, t, re, j, from, to;
 	// for numbers, exact match; for strings, ignore-case match; for anything else, no match
 	t = typeof(field);
@@ -49,6 +49,10 @@ export function singleMatch(field,s,text,word,start,end) {
 		field = field.toLowerCase();
 		if (text) {
 			oneMatch = field.indexOf(s) !== -1;
+		} else if (regexp) {
+			// strip the first slash and last slash
+			re = regexParser(s)
+			oneMatch = field && field.match(re) !== null;
 		} else if (word) {
 			re = new RegExp("(\\s|^)"+s+"(?=\\s|$)","i");
 			oneMatch = field && field.match(re) !== null;
@@ -74,7 +78,7 @@ export function singleMatch(field,s,text,word,start,end) {
 	} else if (field.length !== undefined) {
 	  // array, so go through each
 	  for (j=0;j<field.length;j++) {
-		oneMatch = singleMatch(field[j],s,text,word,start,end);
+		oneMatch = singleMatch(field[j],s,text,word,regexp,start,end);
 	if (oneMatch) {
 	  break;
 	}
@@ -135,7 +139,7 @@ function _matchObj(obj,search,options) {
 				searchTermParts = i.split(options.separator);
 			  	ary = [].concat(search[i]);
 			  	for (j=0;j<ary.length;j++) {
-					oneMatch = singleMatch(deepField(obj,searchTermParts,options.propertySearch,options.propertySearchDepth),ary[j],options.text,options.word,options.start,options.end);
+					oneMatch = singleMatch(deepField(obj,searchTermParts,options.propertySearch,options.propertySearchDepth),ary[j],options.text,options.word,options.regexp,options.start,options.end);
 					if (oneMatch) {
 		  				break;
 					}
@@ -158,4 +162,18 @@ function _matchObj(obj,search,options) {
 		}
 	}
 	return(matched);
+}
+
+function regexParser(input) {
+	// Parse input
+	var m = input.match(/(\/?)(.+)\1([a-z]*)/i);
+
+	// Invalid flags
+	if (m[3] && !/^(?!.*?(.).*?\1)[gmixXsuUAJ]+$/.test(m[3])) {
+			return RegExp(input);
+	}
+
+	// Create the regular expression
+	return new RegExp(m[2], m[3]);
+
 }

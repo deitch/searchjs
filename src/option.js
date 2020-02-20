@@ -22,9 +22,10 @@ export function _getOptions(search, _defaults) {
 	//options.joinAnd = search._join && search._join === "OR" ? false : _defaults.join || true;
 	options.joinAnd = _getSingleOpt(search._join, _defaults.join, "AND") !== "OR";
 
-	// did we have text, word, start or end search?
+	// did we have text, word, regex, start or end search?
 	options.text = _getSingleOpt(search._text,_defaults.text,false);
 	options.word = _getSingleOpt(search._word,_defaults.word,false);
+	options.regexp = _getSingleOpt(search._regexp, _defaults.regexp, false)
 	options.start = _getSingleOpt(search._start,_defaults.start,false);
 	options.end = _getSingleOpt(search._end,_defaults.end,false);
 
