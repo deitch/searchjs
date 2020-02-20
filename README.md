@@ -153,7 +153,7 @@ If the value of a field in a primitive is an object with "from", "to", "gt", "lt
 {age:{gt:30}}  // accepts any age >30
 {age:{to:80}}    // accepts any age <=80
 {age:{lte:80}}    // accepts any age <=80
-{age:{lt:80}}    // accepts any age <80 
+{age:{lt:80}}    // accepts any age <80
 {age:{from:30,to:80}}  // accepts any age from 30 to 80 (inclusive)
 {_not:true,age:{from:30}} // accepts any age <30
 {age:{nothing:"foo"}}  // ignored
@@ -210,6 +210,21 @@ Here are some examples of text searching:
 * `{name:"davi",_start:true}` matches all of `{name:"davi"}, {name:"DAvi"}, {name:"davideq"}` but none of `{name:"abc davi def"}`
 * `{name:"davi",_end:true}` matches all of `{name:"asdadavi"}, {name:"asdsadDAvi"}` but none of `{name:"abdavideq"},{name:"abc davi def"}`
 
+#### Regular Expressions
+
+A more generic form of word and text searching is regular expressions. You can use JavaScript
+[regular expressions (regexp)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+in their `/regex/` format as the value of the field. Because json does not
+support having regex as a value, you need to do two things to make this work:
+
+* quote it, so `{"name": "/ames/i"}` to match anything with "ames" in it, case-insensitive, and not `{"name": /ames/i}`, because that is invalid json
+* indicate that it is a regex by adding the modifier `"_regexp":true` to the query term.
+
+For example:
+
+```
+{"_regexp": true, "name": "/ames/i"}
+```
 
 #### Deep Search Separator
 

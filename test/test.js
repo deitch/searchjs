@@ -14,6 +14,14 @@ data = [
 	{name:"John", "level1":{"level2":{"level3":{"level4":{"level5":{"level6": 200}}}}}}
 ];
 searches = [
+	// regexp
+	{search: {name: "/Car/", "_regexp": true}, results:[2]},
+	{search: {name: "/car/i", "_regexp": true}, results:[2]},
+	{search: {name: "/ali/i", "_regexp": true}, results:[0,4]},
+	{search: {name: "/car/i", "_regexp": true}, results:[2]},
+	{search: {name: "/(l|r)i/i", "_regexp": true}, results:[0,1,2,4]},
+	{search: {name: "/^ri/i", "_regexp": true}, results:[]},
+
 	{search: {name:"alice"}, results:[0,4]},
 	{search: {name:undefined}, results:[]},
 	{search: {empty:undefined}, results:[0,2,3,4,5,6]} ,
@@ -78,7 +86,7 @@ searches = [
 	{search: {"other.personal.birthPlace":"vancouver"},results:[0]},
 	{search: {"other:personal:birthPlace":"vancouver",_separator: ':'},results:[0]},
 	{search: {"cars.brand":"bmw"},results:[4]},
-	{search: {"cars.automatic": true},results:[4]}, 
+	{search: {"cars.automatic": true},results:[4]},
 	{search: {"cars.manual": false},results:[4]},
 	{search: {"cars.cds.title":"Best Of 2014"},results:[]},
 	{search: {"cars.cds.title":"Best Of 2015"},results:[4]},
