@@ -291,10 +291,16 @@ In node, install using:
 
 	npm install searchjs
 
-Browser-version is being worked on. There is nothing node-specific about search js.
+Browser-version is being worked on. There is nothing node-specific about searchjs.
 
 Next, require it using:
-	var s = require('searchjs');
+
+```js
+// for commonjs
+var s = require('searchjs');
+// for es6
+import * as searchjs from "searchjs"
+```
 
 Make a query. There are three types of searches: object, array of objects, and single value.
 
