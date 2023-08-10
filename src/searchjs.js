@@ -84,7 +84,12 @@ export function singleMatch(field,s,text,word,regexp,start,end) {
 	}
 	  }
 	} else if (t === "object") {
-	  oneMatch = field[s] !== undefined;
+		if(typeof s === "object") {
+			// s (search) is a nested primitive
+			oneMatch = matchObject(field,s);
+		} else {
+		  	oneMatch = field[s] !== undefined;
+		}
 	}
 	return(oneMatch);
 }
