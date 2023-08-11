@@ -73,6 +73,14 @@ Thus, the search primitive `{"name.cars.hp":{from:200}}` will match any of the f
 * `{cars: {brand: 'porsche',hp:450}}`
 * `{cars: [{brand: 'bmw',hp:250},{brand: 'lada',hp:10}]}` matches the 'bmw' but not the 'lada', therefore the whole object matches
 
+You can also deep-search for an object using nested primitives. Search primitive `{cars: {brand: 'porsche',hp:450}}` will match:
+* `{name: 'alice', cars:[{brand: 'porsche',hp:450}, {brand: 'bmw',hp:250}, {brand: 'lada',hp:10}]}`
+
+But will not match following:
+* `{name: 'alice', cars:[{brand: 'porsche',hp:250}, {brand: 'bmw',hp:450}, {brand: 'lada',hp:10}]}`
+
+Number of levels of deep-searching is not limited. The valid primitive may look like `{cars: {brand: 'porsche',hp:450, color: {exterior: 'red', interior: {seats: 'beige', dashboard: 'black'}}}}`
+
 
 #### Property Search
 
