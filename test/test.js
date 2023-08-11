@@ -126,6 +126,15 @@ searches = [
 	{search: {name:{from:'d',to:'e'}},results:[3]},
 	{search: {name:{from:'br',to:'cb'}},results:[1,2]},
 	{search: {name:{from:'bs',to:'cb'}},results:[2]},
+
+	// nested objects matching
+	{search: {"personal.cars": {"brand": "bmw", "build": 2016}}, results:[]},
+	{search: {"personal.cars": {"brand": "bmw", "build": 2014}}, results:[3]},
+	{search: {"personal": {"cars": {"brand": "bmw", "build": 2016}}}, results:[]},
+	{search: {"personal": {"cars": {"brand": "bmw", "build": 2014}}}, results:[3]},
+	// object property matching
+	{search: {"personal.cars": "brand"}, results: [3]},
+	{search: {"personal.cars": "model"}, results: []},
 ];
 
 
