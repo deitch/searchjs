@@ -45,7 +45,7 @@
     "codecov": "^3.6.5",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "rollup": "^0.61.2",
+    "rollup": "^3.29.5",
     "rollup-plugin-babel": "^4.3.3",
     "should": "^13.2.1",
     "uglify-js": "^3.4.1"
